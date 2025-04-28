@@ -39,30 +39,15 @@ class CustomTabBar extends StatelessWidget {
               elevation: 0,
               child: TabBar(
                 controller: tabController,
-                indicator: const DotIndicator(
-                  color: Color(0xFF54AF75),
-                ), // no underline
+                indicator: const DotIndicator(color: Color(0xFF54AF75)),
+                labelColor: Color(0xFF54AF75),
+                unselectedLabelColor: Color(0xFF8A8A8A),
                 tabs: [
                   // Home tab
-                  Icon(
-                    Icons.home_filled,
-                    color:
-                        tabController.index == 0
-                            ? const Color(0xFF54AF75)
-                            : const Color(0xFF8A8A8A),
-                    size: 30,
-                  ),
+                  Icon(Icons.home_filled, size: 30),
                   const SizedBox(width: 5),
-
                   // Help tab
-                  Icon(
-                    Icons.help_outline,
-                    color:
-                        tabController.index == 2
-                            ? const Color(0xFF54AF75)
-                            : const Color(0xFF8A8A8A),
-                    size: 30,
-                  ),
+                  Icon(Icons.help_outline, size: 30),
                 ],
               ),
             ),
@@ -79,10 +64,7 @@ class CustomTabBar extends StatelessWidget {
               width: 65,
               height: 65,
               decoration: BoxDecoration(
-                color:
-                    tabController.index == 1
-                        ? const Color(0xFF54A555)
-                        : const Color(0xFF54AF75),
+                color: const Color(0xFF54AF75),
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
