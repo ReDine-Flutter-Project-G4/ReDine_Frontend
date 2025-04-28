@@ -16,85 +16,100 @@ class CustomTabBar extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       clipBehavior: Clip.none,
       children: [
-        ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-          child: BottomAppBar(
-            shape: const CircularNotchedRectangle(),
-            notchMargin: 6.0,
+        Container(
+          height: 85,
+          decoration: BoxDecoration(
             color: Colors.white,
-            elevation: 10,
-            child: SizedBox(
-              height: 50,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  // Home Button
-                  GestureDetector(
-                    onTap: () => onTabSelected(0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.home_filled,
-                          color:
-                              selectedIndex == 0
-                                  ? Color(0xFF54AF75)
-                                  : Color(0xFF8A8A8A),
-                          size: 30,
-                        ),
-                        const SizedBox(height: 4),
-                        Container(
-                          width: 6,
-                          height: 6,
-                          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 15,
+                offset: const Offset(0, -2),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+            child: BottomAppBar(
+              shape: const CircularNotchedRectangle(),
+              notchMargin: 6.0,
+              color: Colors.white,
+              elevation: 0,
+              child: SizedBox(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    // Home Button
+                    GestureDetector(
+                      onTap: () => onTabSelected(0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.home_filled,
                             color:
                                 selectedIndex == 0
                                     ? Color(0xFF54AF75)
-                                    : Colors.white,
-                            shape: BoxShape.circle,
+                                    : Color(0xFF8A8A8A),
+                            size: 30,
                           ),
-                        ),
-                      ],
+                          Container(
+                            width: 5,
+                            height: 5,
+                            decoration: BoxDecoration(
+                              color:
+                                  selectedIndex == 0
+                                      ? Color(0xFF54AF75)
+                                      : Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 5), // Space for center button
-                  // Help Button
-                  GestureDetector(
-                    onTap: () => onTabSelected(2),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.help_outline,
-                          color:
-                              selectedIndex == 2
-                                  ? Color(0xFF54AF75)
-                                  : Color(0xFF8A8A8A),
-                          size: 30,
-                        ),
-                        const SizedBox(height: 4),
-                        Container(
-                          width: 6,
-                          height: 6,
-                          decoration: BoxDecoration(
+                    const SizedBox(width: 5), // Space for center button
+                    // Help Button
+                    GestureDetector(
+                      onTap: () => onTabSelected(2),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.help_outline,
                             color:
                                 selectedIndex == 2
                                     ? Color(0xFF54AF75)
-                                    : Colors.white,
-                            shape: BoxShape.circle,
+                                    : Color(0xFF8A8A8A),
+                            size: 30,
                           ),
-                        ),
-                      ],
+                          Container(
+                            width: 5,
+                            height: 5,
+                            decoration: BoxDecoration(
+                              color:
+                                  selectedIndex == 2
+                                      ? Color(0xFF54AF75)
+                                      : Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
         ),
+        // Search Button
         Positioned(
           top: -25,
           child: GestureDetector(
