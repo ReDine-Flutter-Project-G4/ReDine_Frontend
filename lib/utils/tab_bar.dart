@@ -32,11 +32,8 @@ class CustomTabBar extends StatelessWidget {
               topLeft: Radius.circular(30),
               topRight: Radius.circular(30),
             ),
-            child: BottomAppBar(
-              shape: const CircularNotchedRectangle(),
-              notchMargin: 6.0,
-              color: Colors.white,
-              elevation: 0,
+            child: Material(
+              type: MaterialType.transparency,
               child: TabBar(
                 controller: tabController,
                 indicator: const DotIndicator(color: Color(0xFF54AF75)),
@@ -54,8 +51,10 @@ class CustomTabBar extends StatelessWidget {
           ),
         ),
         // Floating Search Button
-        Positioned(
-          top: -25,
+        AnimatedPositioned(
+           duration: const Duration(milliseconds: 300), // 👈 animation speed
+  curve: Curves.easeInOut,
+          top: tabController.index==1?-30:-25,
           child: GestureDetector(
             onTap: () {
               tabController.animateTo(1); // Switch to search tab
@@ -109,7 +108,7 @@ class _DotPainter extends BoxPainter {
 
     final Offset circleOffset = Offset(
       offset.dx + configuration.size!.width / 2,
-      offset.dy + configuration.size!.height - 2,
+      offset.dy + configuration.size!.height - 25,
     );
 
     canvas.drawCircle(circleOffset, 3, paint);
