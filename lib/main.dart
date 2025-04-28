@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green,
+      backgroundColor: Colors.white,
       body: _pages[_selectedIndex],
       bottomNavigationBar: CustomTabBar(
         selectedIndex: _selectedIndex,
