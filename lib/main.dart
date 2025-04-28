@@ -28,29 +28,38 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
 
-  final List<Widget> _pages = const [
-    Center(child: Text('Home Page')),
-    Center(child: Text('Search Page')),
-    Center(child: Text('Help Page')),
-  ];
-
-  void _onTabSelected(int index) {
-    setState(() {
-      _selectedIndex = index;
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+    _tabController.addListener(() {
+      setState(() {}); // Rebuild when tab index changes
     });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose(); // Always dispose controllers!
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: _pages[_selectedIndex],
+      backgroundColor: Colors.grey[200],
+      body: TabBarView(
+        controller: _tabController,
+        children: const [
+          Center(child: Text('Home Page')),
+          Center(child: Text('Search Page')),
+          Center(child: Text('Help Page')),
+        ],
+      ),
       bottomNavigationBar: CustomTabBar(
-        selectedIndex: _selectedIndex,
-        onTabSelected: _onTabSelected,
+        tabController: _tabController,
       ),
     );
   }
