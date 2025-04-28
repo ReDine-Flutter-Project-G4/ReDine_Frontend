@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CustomTabBar extends StatelessWidget {
-  final int selectedIndex;
-  final Function(int) onTabSelected;
+  final TabController tabController;
 
-  const CustomTabBar({
-    super.key,
-    required this.selectedIndex,
-    required this.onTabSelected,
-  });
+  const CustomTabBar({super.key, required this.tabController});
 
   @override
   Widget build(BuildContext context) {
@@ -42,84 +37,52 @@ class CustomTabBar extends StatelessWidget {
               notchMargin: 6.0,
               color: Colors.white,
               elevation: 0,
-              child: SizedBox(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    // Home Button
-                    GestureDetector(
-                      onTap: () => onTabSelected(0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.home_filled,
-                            color:
-                                selectedIndex == 0
-                                    ? Color(0xFF54AF75)
-                                    : Color(0xFF8A8A8A),
-                            size: 30,
-                          ),
-                          Container(
-                            width: 5,
-                            height: 5,
-                            decoration: BoxDecoration(
-                              color:
-                                  selectedIndex == 0
-                                      ? Color(0xFF54AF75)
-                                      : Colors.white,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 5), // Space for center button
-                    // Help Button
-                    GestureDetector(
-                      onTap: () => onTabSelected(2),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.help_outline,
-                            color:
-                                selectedIndex == 2
-                                    ? Color(0xFF54AF75)
-                                    : Color(0xFF8A8A8A),
-                            size: 30,
-                          ),
-                          Container(
-                            width: 5,
-                            height: 5,
-                            decoration: BoxDecoration(
-                              color:
-                                  selectedIndex == 2
-                                      ? Color(0xFF54AF75)
-                                      : Colors.white,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              child: TabBar(
+                controller: tabController,
+                indicator: const DotIndicator(
+                  color: Color(0xFF54AF75),
+                ), // no underline
+                tabs: [
+                  // Home tab
+                  Icon(
+                    Icons.home_filled,
+                    color:
+                        tabController.index == 0
+                            ? const Color(0xFF54AF75)
+                            : const Color(0xFF8A8A8A),
+                    size: 30,
+                  ),
+                  const SizedBox(width: 5),
+
+                  // Help tab
+                  Icon(
+                    Icons.help_outline,
+                    color:
+                        tabController.index == 2
+                            ? const Color(0xFF54AF75)
+                            : const Color(0xFF8A8A8A),
+                    size: 30,
+                  ),
+                ],
               ),
             ),
           ),
         ),
-        // Search Button
+        // Floating Search Button
         Positioned(
           top: -25,
           child: GestureDetector(
-            onTap: () => onTabSelected(1),
+            onTap: () {
+              tabController.animateTo(1); // Switch to search tab
+            },
             child: Container(
               width: 65,
               height: 65,
               decoration: BoxDecoration(
                 color:
-                    selectedIndex == 1 ? Color(0xFF54A555) : Color(0xFF54AF75),
+                    tabController.index == 1
+                        ? const Color(0xFF54A555)
+                        : const Color(0xFF54AF75),
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
@@ -136,5 +99,37 @@ class CustomTabBar extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class DotIndicator extends Decoration {
+  final Color color;
+
+  const DotIndicator({required this.color});
+
+  @override
+  BoxPainter createBoxPainter([VoidCallback? onChanged]) {
+    return _DotPainter(color: color);
+  }
+}
+
+class _DotPainter extends BoxPainter {
+  final Color color;
+
+  _DotPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
+    final Paint paint =
+        Paint()
+          ..color = color
+          ..isAntiAlias = true;
+
+    final Offset circleOffset = Offset(
+      offset.dx + configuration.size!.width / 2,
+      offset.dy + configuration.size!.height - 2,
+    );
+
+    canvas.drawCircle(circleOffset, 3, paint);
   }
 }
