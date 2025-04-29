@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../pages/detail_page.dart';
 import 'dart:convert';
 
 import '../widgets/search_bar_widget.dart';
@@ -29,6 +30,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
   bool _isLoading = true;
   String _errorMessage = '';
   bool isFilterOpen = false;
+
 
   List<String> _allIngredients = [];
   List<String> _allCategories = [];
@@ -149,7 +151,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
   }
 
   Future<void> _fetchMealSuggestions() async {
-    await _fetchData('http://localhost:3001/api/menu/suggestion');
+    await _fetchData('http://localhost:3000/api/menu/suggestion');
   }
 
   Future<void> _fetchMealIngredients() async {
@@ -352,12 +354,20 @@ class _SearchTabPageState extends State<SearchTabPage> {
       sliver: SliverGrid(
         delegate: SliverChildBuilderDelegate((context, index) {
           final meal = _mealData[index];
-          return custom_card.Card(
-            strMeal: meal['strMeal'],
-            strMealThumb: meal['strMealThumb'],
-            strArea: meal['strArea'],
-            strCategory: meal['strCategory'],
-            strIngredients: _extractIngredients(meal),
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DetailPage(meal: meal)),
+              );
+            },
+            child: custom_card.Card(
+              strMeal: meal['strMeal'],
+              strMealThumb: meal['strMealThumb'],
+              strArea: meal['strArea'],
+              strCategory: meal['strCategory'],
+              strIngredients: _extractIngredients(meal),
+            ),
           );
         }, childCount: _mealData.length),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

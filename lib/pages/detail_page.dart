@@ -1,15 +1,210 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailPage extends StatefulWidget {
-  const DetailPage({super.key});
+  final Map<String, dynamic> meal;
+
+  const DetailPage({super.key, required this.meal});
 
   @override
   State<DetailPage> createState() => _DetailPageState();
 }
 
 class _DetailPageState extends State<DetailPage> {
+  List<Map<String, String>> getIngredients(Map<String, dynamic> meal) {
+    final ingredients = <Map<String, String>>[];
+    for (int i = 1; i <= 20; i++) {
+      final ingredient = meal['strIngredient$i'];
+      final measure = meal['strMeasure$i'];
+      if (ingredient != null &&
+          ingredient.toString().trim().isNotEmpty &&
+          ingredient != '') {
+        ingredients.add({
+          'ingredient': ingredient.toString(),
+          'measure': measure?.toString() ?? '',
+        });
+      }
+    }
+    return ingredients;
+  }
+
+  Future<void> _launchYoutube() async {
+    final youtubeUrl = widget.meal['strYoutube'];
+    if (youtubeUrl != null && youtubeUrl.isNotEmpty) {
+      final uri = Uri.parse(youtubeUrl);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not open the YouTube link')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    final meal = widget.meal;
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                Image.network(
+                  meal['strMealThumb'],
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+                Positioned(
+                  top: 40,
+                  left: 16,
+                  child: CircleAvatar(
+                    backgroundColor: const Color(0xFF54AF75),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new,
+                        color: Colors.white,
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              transform: Matrix4.translationValues(0.0, -250.0, 0.0),
+              padding: const EdgeInsets.all(20),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Column(
+                      children: [
+                        Text(
+                          meal['strMeal'] ?? '',
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        
+                        const SizedBox(height: 8),
+
+                        Wrap(
+                          spacing: 8,
+                          alignment: WrapAlignment.center,
+                          children: [
+                            _buildTagChip(meal['strArea']),
+                            _buildTagChip(meal['strCategory']),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+                  _buildSectionTitle('Ingredients'),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Column(
+                      children:
+                          getIngredients(meal)
+                              .map(
+                                (item) => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 4,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Text(item['ingredient'] ?? ''),
+                                      ),
+                                      Text(item['measure'] ?? ''),
+                                    ],
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Divider(indent: 10, endIndent: 10),
+                  _buildSectionTitle('Instructions'),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
+                      meal['strInstructions'] ?? '',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Divider(indent: 10, endIndent: 10),
+                  _buildSectionTitle('Tutorial Video'),
+                  TextButton.icon(
+                    onPressed: _launchYoutube,
+                    icon: Image.asset(
+                      '../../assets/youTube_logo.png',
+                      scale: 8,
+                    ),
+                    label: const Text(
+                      'Watch on YouTube',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 20,
+          color: Color(0xFF54AF75),
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTagChip(String? label) {
+    if (label == null || label.isEmpty) return const SizedBox.shrink();
+    return Chip(
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      visualDensity: VisualDensity.compact,
+      label: Text(
+        label,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 12,
+        ),
+      ),
+      backgroundColor: const Color(0xFF54AF75),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    );
   }
 }
