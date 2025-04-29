@@ -1,11 +1,14 @@
 import 'dart:async';
-import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../pages/detail_page.dart';
+import 'dart:convert';
+
 import '../widgets/search_bar_widget.dart';
 import '../widgets/chip_list_widget.dart';
 import '../widgets/filter_bottom_sheet.dart';
+
 import '../utils/card.dart' as custom_card;
 
 class SearchTabPage extends StatefulWidget {
@@ -28,6 +31,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
   String _errorMessage = '';
   bool isFilterOpen = false;
 
+
   List<String> _allIngredients = [];
   List<String> _allCategories = [];
   List<String> _allNationalities = [];
@@ -37,6 +41,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
   void initState() {
     super.initState();
     _searchController = SearchController();
+    _fetchMealSuggestions();
     _fetchIngredients();
     _fetchCategories();
     _fetchNationality();
@@ -53,7 +58,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = 'http://localhost:3001/api/meta/categories';
+    final url = 'http://localhost:3000/api/meta/categories';
     try {
       final response = await http.get(
         Uri.parse(url),
@@ -84,7 +89,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = 'http://localhost:3001/api/meta/areas';
+    final url = 'http://localhost:3000/api/meta/areas';
 
     try {
       final response = await http.get(
@@ -117,7 +122,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = 'http://localhost:3001/api/meta/ingredients';
+    final url = 'http://localhost:3000/api/meta/ingredients';
 
     try {
       final response = await http.get(
@@ -129,15 +134,11 @@ class _SearchTabPageState extends State<SearchTabPage> {
         final jsonResponse = json.decode(response.body);
         setState(() {
           _allIngredients = List<String>.from(jsonResponse['ingredients']);
-          _allAllergies = List<String>.from(jsonResponse['ingredients']);
-          _isLoading = false;
         });
       } else if (response.statusCode == 404) {
         setState(() {
           _allIngredients = [];
-          _allAllergies = [];
           _errorMessage = 'No data found';
-          _isLoading = false;
         });
       } else {
         throw Exception('Failed to load data');
@@ -145,9 +146,12 @@ class _SearchTabPageState extends State<SearchTabPage> {
     } catch (e) {
       setState(() {
         _errorMessage = 'Error fetching data: $e';
-        _isLoading = false;
       });
     }
+  }
+
+  Future<void> _fetchMealSuggestions() async {
+    await _fetchData('http://localhost:3000/api/menu/suggestion');
   }
 
   Future<void> _fetchMealIngredients() async {
@@ -155,11 +159,16 @@ class _SearchTabPageState extends State<SearchTabPage> {
     final nationalityQuery = _selectedNationalities.join(',');
     final cateforyyQuery = _selectedCategories.join(',');
     final allergiesQuery = _selectedAllergies.join(',');
+    await _fetchData(
+      'http://localhost:3000/api/menu/ingredients?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&allergies=$allergiesQuery',
+    );
+  }
+
+  Future<void> _fetchData(String url) async {
     setState(() {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = 'http://localhost:3001/api/menu/ingredients?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&allergies=$allergiesQuery';
 
     try {
       final response = await http.get(
@@ -214,22 +223,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
               child: Center(child: CircularProgressIndicator()),
             ),
           if (_errorMessage.isNotEmpty) _buildErrorMessage(),
-          if (_mealData.isNotEmpty && !_isLoading)
-            _buildMealGrid()
-          else
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Text(
-                    'Enter leftover ingredients to get recipe ideas!',
-                    style: const TextStyle(fontSize: 16, color: Color(0xFF8A8A8A)),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ),
+          if (_mealData.isNotEmpty && !_isLoading) _buildMealGrid(),
         ],
       ),
     );
@@ -309,6 +303,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
                             });
                           },
                           fetchMealIngredients: _fetchMealIngredients,
+                          fetchMealSuggestions: _fetchMealSuggestions,
                           fetchAllergies: _allAllergies,
                           fetchCategories: _allCategories,
                           fetchNationalities: _allNationalities,
@@ -334,10 +329,10 @@ class _SearchTabPageState extends State<SearchTabPage> {
           chips: _selectedChips,
           onChipDeleted: (chip) async {
             setState(() => _selectedChips.remove(chip));
-            if (_selectedChips.isNotEmpty) {
-              await _fetchMealIngredients();
+            if (_selectedChips.isEmpty) {
+              await _fetchMealSuggestions();
             } else {
-              _mealData = [];
+              await _fetchMealIngredients();
             }
           },
         ),
