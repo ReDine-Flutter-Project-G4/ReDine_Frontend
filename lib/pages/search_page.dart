@@ -224,7 +224,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Text(
                     'Enter leftover ingredients to get recipe ideas!',
-                    style: const TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16, color: Color(0xFF8A8A8A)),
                     textAlign: TextAlign.center,
                   ),
                 ),
