@@ -52,9 +52,9 @@ class CustomTabBar extends StatelessWidget {
         ),
         // Floating Search Button
         AnimatedPositioned(
-           duration: const Duration(milliseconds: 300), // 👈 animation speed
-  curve: Curves.easeInOut,
-          top: tabController.index==1?-30:-25,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          top: tabController.index == 1 ? -30 : -25,
           child: GestureDetector(
             onTap: () {
               tabController.animateTo(1); // Switch to search tab
