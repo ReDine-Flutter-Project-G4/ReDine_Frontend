@@ -17,7 +17,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ReDine',
-      theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF54AF75)),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: const Color(0xFF54AF75), // Text and Icon color
+            overlayColor: Colors.black, // Hover color
+            textStyle: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        scaffoldBackgroundColor: Colors.white,
+      ),
       initialRoute: '/',
       routes: {
         '/': (context) => const MainHomePage(),

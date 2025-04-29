@@ -13,26 +13,29 @@ class ChipListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 8,
+      spacing: 6,
       runSpacing: 4,
       children: chips.map((chip) {
         return Chip(
+          // labelPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          visualDensity: VisualDensity.compact,
           label: Text(
             chip,
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontSize: 16,
+              fontSize: 12,
             ),
           ),
           backgroundColor: const Color(0xFF54AF75),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(20),
           ),
           deleteIcon: const Icon(
             Icons.close,
             color: Colors.white,
-            size: 18,
+            size: 12,
           ),
           onDeleted: () => onChipDeleted(chip),
         );

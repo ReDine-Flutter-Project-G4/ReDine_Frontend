@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class SearchBarWidget extends StatelessWidget {
+  final String barHintText;
   final SearchController searchController;
   final List<String> allSuggestions;
   final Function(String) onItemSelected;
 
   const SearchBarWidget({
     super.key,
+    required this.barHintText,
     required this.searchController,
     required this.allSuggestions,
     required this.onItemSelected,
@@ -14,25 +16,40 @@ class SearchBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SearchAnchor.bar(
-      searchController: searchController,
-      barHintText: 'Add your ingredient',
-      suggestionsBuilder: (context, controller) {
-        final query = controller.text.toLowerCase();
-        final suggestions = allSuggestions
-            .where((item) => item.toLowerCase().contains(query))
-            .toList();
+    return Container(
+      height: 40,
+      width: 300,
+      child: SearchAnchor.bar(
+        viewBackgroundColor: Colors.white,
+        searchController: searchController,
+        barHintText: barHintText,
+        barHintStyle: WidgetStatePropertyAll(
+          const TextStyle(fontSize: 14, color: Color(0xFF8A8A8A)),
+        ),
+        viewHeaderHeight: 40,
+        viewHeaderTextStyle: TextStyle(fontSize: 14),
+        viewHeaderHintStyle: TextStyle(fontSize: 14, color: Color(0xFF8A8A8A)),
+        dividerColor: Color(0xFF8A8A8A),
+        isFullScreen: false,
+        barBackgroundColor: WidgetStatePropertyAll(Colors.white),
+        suggestionsBuilder: (context, controller) {
+          final query = controller.text.toLowerCase();
+          final suggestions =
+              allSuggestions
+                  .where((item) => item.toLowerCase().contains(query))
+                  .toList();
 
-        return suggestions.map((item) {
-          return ListTile(
-            title: Text(item),
-            onTap: () {
-              onItemSelected(item);
-              controller.closeView(controller.text);
-            },
-          );
-        }).toList();
-      },
+          return suggestions.map((item) {
+            return ListTile(
+              title: Text(item),
+              onTap: () {
+                onItemSelected(item);
+                controller.closeView(controller.text);
+              },
+            );
+          }).toList();
+        },
+      ),
     );
   }
 }

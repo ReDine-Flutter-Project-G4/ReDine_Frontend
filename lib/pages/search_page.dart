@@ -65,6 +65,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
                   // SearchAnchor
                   Expanded(
                     child: SearchBarWidget(
+                      barHintText: 'Add your ingredient',
                       searchController: _searchController,
                       allSuggestions: allSuggestions,
                       onItemSelected: (item) {
@@ -96,6 +97,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
                       onPressed: () {
                         showModalBottomSheet(
                           context: context,
+                          isScrollControlled: true,
                           builder: (context) => const FilterBottomSheet(),
                         );
                       },
