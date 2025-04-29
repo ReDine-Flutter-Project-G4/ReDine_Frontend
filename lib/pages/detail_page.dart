@@ -156,7 +156,7 @@ class _DetailPageState extends State<DetailPage> {
                   TextButton.icon(
                     onPressed: _launchYoutube,
                     icon: Image.asset(
-                      '../../assets/youTube_logo.png',
+                      '../../assets/youtube_logo.png',
                       scale: 8,
                     ),
                     label: const Text(
