@@ -19,12 +19,12 @@ class _DetailPageState extends State<DetailPage> {
   void initState() {
     super.initState();
     final videoId = _extractYoutubeId(widget.meal['strYoutube']);
-    _youtubeController = YoutubePlayerController(
-      initialVideoId: videoId ?? '',
+    _youtubeController = YoutubePlayerController.fromVideoId(
+      videoId: videoId ?? '',
       params: const YoutubePlayerParams(
         showFullscreenButton: true,
-        autoPlay: false,
       ),
+      autoPlay: false,
     );
   }
 
@@ -175,10 +175,7 @@ class _DetailPageState extends State<DetailPage> {
                   _buildSectionTitle('Tutorial Video'),
                   TextButton.icon(
                     onPressed: _launchYoutube,
-                    icon: Image.asset(
-                      '../../assets/youtube_logo.png',
-                      scale: 8,
-                    ),
+                    icon: Image.asset('assets/youtube_logo.png', scale: 8),
                     label: const Text(
                       'YouTube',
                       style: TextStyle(
@@ -189,7 +186,8 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                   SizedBox(
                     height: 250,
-                    child: YoutubePlayerIFrame(controller: _youtubeController),
+                    width: double.infinity,
+                    child: YoutubePlayer(controller: _youtubeController),
                   ),
 
                   const SizedBox(height: 20),
