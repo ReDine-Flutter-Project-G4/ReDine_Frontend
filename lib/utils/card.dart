@@ -65,7 +65,7 @@ class Card extends StatelessWidget {
               const SizedBox(height: 5),
               RichText(
                 text: TextSpan(
-                  style: GoogleFonts.kanit(
+                  style: TextStyle(
                     fontSize: 10,
                     color: const Color(0xFF020202),
                   ),
@@ -92,7 +92,7 @@ class Card extends StatelessWidget {
     ),
     child: Text(
       label,
-      style: GoogleFonts.kanit(
+      style: TextStyle(
         fontSize: 10,
         color: Colors.white,
         fontWeight: FontWeight.w500,
