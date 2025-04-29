@@ -23,21 +23,15 @@ class _SearchTabPageState extends State<SearchTabPage> {
   bool _isLoading = true;
   String _errorMessage = '';
   bool isFilterOpen = false;
-
-  final List<String> _allSuggestions = [
-    'Chicken Breast',
-    'Chicken Thighs',
-    'Pork Belly',
-    'Beef Ribs',
-    'Bread',
-    'Pork',
-  ];
+  
+  List<String> _allIngredients = [];
 
   @override
   void initState() {
     super.initState();
     _searchController = SearchController();
     _fetchMealSuggestions();
+    _fetchIngredients();
   }
 
   @override
@@ -46,11 +40,47 @@ class _SearchTabPageState extends State<SearchTabPage> {
     super.dispose();
   }
 
+  Future<void> _fetchIngredients() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = '';
+    });
+    final url = 'http://localhost:3000/api/ingredients';
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        setState(() {
+          _allIngredients = List<String>.from(jsonResponse['ingredients']);
+          _isLoading = false;
+        });
+      } else if (response.statusCode == 404) {
+        setState(() {
+          _allIngredients = [];
+          _errorMessage = 'No data found';
+          _isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Error fetching data: $e';
+        _isLoading = false;
+      });
+    }
+  }
+
   Future<void> _fetchMealSuggestions() async {
     await _fetchData('http://localhost:3001/api/menu/suggestion');
   }
 
-  Future<void> _fetchIngredients() async {
+  Future<void> _fetchMealIngredients() async {
     final ingredientsQuery = _selectedChips.join(',');
     await _fetchData(
       'http://localhost:3001/api/menu/ingredients?ingredients=$ingredientsQuery',
@@ -146,11 +176,11 @@ class _SearchTabPageState extends State<SearchTabPage> {
               child: SearchBarWidget(
                 barHintText: 'Add your ingredient',
                 searchController: _searchController,
-                allSuggestions: _allSuggestions,
+                allSuggestions: _allIngredients,
                 onItemSelected: (item) async {
                   if (!_selectedChips.contains(item)) {
                     setState(() => _selectedChips.add(item));
-                    await _fetchIngredients();
+                    await _fetchMealIngredients();
                   }
                 },
               ),
@@ -198,7 +228,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
             if (_selectedChips.isEmpty) {
               await _fetchMealSuggestions();
             } else {
-              await _fetchIngredients();
+              await _fetchMealIngredients();
             }
           },
         ),
