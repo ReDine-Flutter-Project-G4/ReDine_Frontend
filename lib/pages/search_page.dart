@@ -134,10 +134,12 @@ class _SearchTabPageState extends State<SearchTabPage> {
         final jsonResponse = json.decode(response.body);
         setState(() {
           _allIngredients = List<String>.from(jsonResponse['ingredients']);
+          _allAllergies = List<String>.from(jsonResponse['ingredients']);
         });
       } else if (response.statusCode == 404) {
         setState(() {
           _allIngredients = [];
+          _allAllergies = [];
           _errorMessage = 'No data found';
         });
       } else {

@@ -17,7 +17,6 @@ class ChipListWidget extends StatelessWidget {
       runSpacing: 4,
       children: chips.map((chip) {
         return Chip(
-          // labelPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           visualDensity: VisualDensity.compact,
           label: Text(
