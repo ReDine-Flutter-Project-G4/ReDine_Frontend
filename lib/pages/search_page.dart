@@ -161,7 +161,8 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = 'http://localhost:3000/api/menu/ingredients?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&avoidances=$avoidancesQuery';
+    final url =
+        'http://localhost:3000/api/menu/ingredients?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&avoidances=$avoidancesQuery';
     try {
       final response = await http.get(
         Uri.parse(url),
@@ -178,6 +179,11 @@ class _SearchTabPageState extends State<SearchTabPage> {
         setState(() {
           _mealData = [];
           _errorMessage = 'No data found';
+          _isLoading = false;
+        });
+      } else if (response.statusCode == 400) {
+        setState(() {
+          _mealData = [];
           _isLoading = false;
         });
       } else {
@@ -225,7 +231,10 @@ class _SearchTabPageState extends State<SearchTabPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Text(
                     'Enter leftover ingredients to get recipe ideas!',
-                    style: const TextStyle(fontSize: 16, color: Color(0xFF8A8A8A)),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF8A8A8A),
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -335,11 +344,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
           chips: _selectedChips,
           onChipDeleted: (chip) async {
             setState(() => _selectedChips.remove(chip));
-            if (_selectedChips.isNotEmpty) {
-              await _fetchMealIngredients();
-            } else {
-              _mealData = [];
-            }
+            await _fetchMealIngredients();
           },
         ),
       ),
