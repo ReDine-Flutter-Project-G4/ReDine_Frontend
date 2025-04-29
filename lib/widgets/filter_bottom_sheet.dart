@@ -204,13 +204,16 @@ class FilterSectionWidget extends StatelessWidget {
         const SizedBox(height: 8),
 
         // Reuse SearchBarWidget
-        SearchBarWidget(
-          barHintText: hintText,
-          searchController: controller,
-          allSuggestions: allSuggestions,
-          onItemSelected: (item) {
-            onChipAdded(item);
-          },
+        SizedBox(
+          width: double.infinity,
+          child: SearchBarWidget(
+            barHintText: hintText,
+            searchController: controller,
+            allSuggestions: allSuggestions,
+            onItemSelected: (item) {
+              onChipAdded(item);
+            },
+          ),
         ),
         const SizedBox(height: 8),
 

@@ -174,6 +174,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
                         showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
+                          backgroundColor: Colors.white,
                           builder: (context) => const FilterBottomSheet(),
                         );
                       },
