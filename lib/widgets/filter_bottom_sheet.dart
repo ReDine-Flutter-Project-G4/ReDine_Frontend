@@ -3,7 +3,36 @@ import 'search_bar_widget.dart';
 import 'chip_list_widget.dart';
 
 class FilterBottomSheet extends StatefulWidget {
-  const FilterBottomSheet({super.key});
+  final List<String> selectedAllergies;
+  final List<String> selectedCategories;
+  final List<String> selectedNationalities;
+
+  final List<String> fetchAllergies;
+  final List<String> fetchCategories;
+  final List<String> fetchNationalities;
+
+  final Future<void> Function() fetchMealIngredients;
+  final Future<void> Function() fetchMealSuggestions;
+
+  final Function({
+    required List<String> allergies,
+    required List<String> categories,
+    required List<String> nationalities,
+  })
+  onApply;
+
+  const FilterBottomSheet({
+    super.key,
+    required this.selectedAllergies,
+    required this.selectedCategories,
+    required this.selectedNationalities,
+    required this.onApply,
+    required this.fetchMealIngredients,
+    required this.fetchMealSuggestions,
+    required this.fetchAllergies,
+    required this.fetchCategories,
+    required this.fetchNationalities,
+  });
 
   @override
   State<FilterBottomSheet> createState() => _FilterBottomSheetState();
@@ -17,6 +46,14 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   final List<String> _selectedAllergies = [];
   final List<String> _selectedCategories = [];
   final List<String> _selectedNationalities = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedAllergies.addAll(widget.selectedAllergies);
+    _selectedCategories.addAll(widget.selectedCategories);
+    _selectedNationalities.addAll(widget.selectedNationalities);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +102,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             ),
 
             const SizedBox(height: 8),
-            // const Divider(),
 
+            // const Divider(),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -77,7 +114,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       hintText: 'e.g., Nuts, Milk, Fish',
                       controller: _allergyController,
                       selectedChips: _selectedAllergies,
-                      allSuggestions: ['Chicken', 'Fish', 'Milk', 'Egg'],
+                      allSuggestions: widget.fetchAllergies,
                       onChipAdded: (chip) {
                         setState(() {
                           if (!_selectedAllergies.contains(chip)) {
@@ -97,7 +134,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       hintText: 'e.g., Vegan, Pasta, Seafood',
                       controller: _categoryController,
                       selectedChips: _selectedCategories,
-                      allSuggestions: [],
+                      allSuggestions: widget.fetchCategories,
                       onChipDeleted: (chip) {
                         setState(() {
                           _selectedCategories.remove(chip);
@@ -117,7 +154,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       hintText: 'e.g., Italian, Chinese, Indian',
                       controller: _nationalityController,
                       selectedChips: _selectedNationalities,
-                      allSuggestions: [],
+                      allSuggestions: widget.fetchNationalities,
                       onChipDeleted: (chip) {
                         setState(() {
                           _selectedNationalities.remove(chip);
@@ -143,7 +180,19 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  // Handle apply
+                  final hasSelected = (_selectedAllergies.isNotEmpty ||
+                      _selectedCategories.isNotEmpty ||
+                      _selectedNationalities.isNotEmpty);
+                  widget.onApply(
+                    allergies: _selectedAllergies,
+                    categories: _selectedCategories,
+                    nationalities: _selectedNationalities,
+                  );
+                  if (hasSelected) {
+                    widget.fetchMealIngredients();
+                  } else {
+                    widget.fetchMealSuggestions();
+                  }
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(

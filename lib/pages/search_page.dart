@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -18,13 +20,20 @@ class SearchTabPage extends StatefulWidget {
 
 class _SearchTabPageState extends State<SearchTabPage> {
   late final SearchController _searchController;
+
+  final List<String> _selectedAllergies = [];
+  final List<String> _selectedCategories = [];
+  final List<String> _selectedNationalities = [];
   final List<String> _selectedChips = [];
   List<dynamic> _mealData = [];
   bool _isLoading = true;
   String _errorMessage = '';
   bool isFilterOpen = false;
-  
+
   List<String> _allIngredients = [];
+  List<String> _allCategories = [];
+  List<String> _allNationalities = [];
+  List<String> _allAllergies = [];
 
   @override
   void initState() {
@@ -32,6 +41,8 @@ class _SearchTabPageState extends State<SearchTabPage> {
     _searchController = SearchController();
     _fetchMealSuggestions();
     _fetchIngredients();
+    _fetchCategories();
+    _fetchNationality();
   }
 
   @override
@@ -40,12 +51,76 @@ class _SearchTabPageState extends State<SearchTabPage> {
     super.dispose();
   }
 
+  Future<void> _fetchCategories() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = '';
+    });
+    final url = 'http://localhost:3001/api/meta/categories';
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+      );
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        setState(() {
+          _allCategories = List<String>.from(jsonResponse['categories']);
+        });
+      } else if (response.statusCode == 404) {
+        setState(() {
+          _allCategories = [];
+          _errorMessage = 'No data found';
+        });
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Error fetching data: $e';
+      });
+    }
+  }
+
+  Future<void> _fetchNationality() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = '';
+    });
+    final url = 'http://localhost:3001/api/meta/areas';
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        setState(() {
+          _allNationalities = List<String>.from(jsonResponse['areas']);
+        });
+      } else if (response.statusCode == 404) {
+        setState(() {
+          _allNationalities = [];
+          _errorMessage = 'No data found';
+        });
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Error fetching data: $e';
+      });
+    }
+  }
+
   Future<void> _fetchIngredients() async {
     setState(() {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = 'http://localhost:3000/api/ingredients';
+    final url = 'http://localhost:3001/api/meta/ingredients';
 
     try {
       final response = await http.get(
@@ -79,8 +154,11 @@ class _SearchTabPageState extends State<SearchTabPage> {
 
   Future<void> _fetchMealIngredients() async {
     final ingredientsQuery = _selectedChips.join(',');
+    final nationalityQuery = _selectedNationalities.join(',');
+    final cateforyyQuery = _selectedCategories.join(',');
+    final allergiesQuery = _selectedAllergies.join(',');
     await _fetchData(
-      'http://localhost:3001/api/menu/ingredients?ingredients=$ingredientsQuery',
+      'http://localhost:3001/api/menu/ingredients?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&allergies=$allergiesQuery',
     );
   }
 
@@ -200,7 +278,34 @@ class _SearchTabPageState extends State<SearchTabPage> {
                     context: context,
                     isScrollControlled: true,
                     backgroundColor: Colors.white,
-                    builder: (context) => const FilterBottomSheet(),
+                    builder:
+                        (context) => FilterBottomSheet(
+                          selectedAllergies: _selectedAllergies,
+                          selectedCategories: _selectedCategories,
+                          selectedNationalities: _selectedNationalities,
+                          onApply: ({
+                            required List<String> allergies,
+                            required List<String> categories,
+                            required List<String> nationalities,
+                          }) async {
+                            setState(() {
+                              _selectedAllergies
+                                ..clear()
+                                ..addAll(allergies);
+                              _selectedCategories
+                                ..clear()
+                                ..addAll(categories);
+                              _selectedNationalities
+                                ..clear()
+                                ..addAll(nationalities);
+                            });
+                          },
+                          fetchMealIngredients: _fetchMealIngredients,
+                          fetchMealSuggestions: _fetchMealSuggestions,
+                          fetchAllergies: _allAllergies,
+                          fetchCategories: _allCategories,
+                          fetchNationalities: _allNationalities,
+                        ),
                   );
                   setState(() {
                     isFilterOpen = false;
