@@ -1,9 +1,8 @@
 import 'dart:async';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../pages/detail_page.dart';
-import 'dart:convert';
 
 import '../widgets/search_bar_widget.dart';
 import '../widgets/chip_list_widget.dart';
@@ -22,7 +21,7 @@ class SearchTabPage extends StatefulWidget {
 class _SearchTabPageState extends State<SearchTabPage> {
   late final SearchController _searchController;
 
-  final List<String> _selectedAllergies = [];
+  final List<String> _selectedAvoidances = [];
   final List<String> _selectedCategories = [];
   final List<String> _selectedNationalities = [];
   final List<String> _selectedChips = [];
@@ -31,17 +30,15 @@ class _SearchTabPageState extends State<SearchTabPage> {
   String _errorMessage = '';
   bool isFilterOpen = false;
 
-
   List<String> _allIngredients = [];
   List<String> _allCategories = [];
   List<String> _allNationalities = [];
-  List<String> _allAllergies = [];
+  List<String> _allAvoidances = [];
 
   @override
   void initState() {
     super.initState();
     _searchController = SearchController();
-    _fetchMealSuggestions();
     _fetchIngredients();
     _fetchCategories();
     _fetchNationality();
@@ -134,11 +131,15 @@ class _SearchTabPageState extends State<SearchTabPage> {
         final jsonResponse = json.decode(response.body);
         setState(() {
           _allIngredients = List<String>.from(jsonResponse['ingredients']);
+          _allAvoidances = List<String>.from(jsonResponse['ingredients']);
+          _isLoading = false;
         });
       } else if (response.statusCode == 404) {
         setState(() {
           _allIngredients = [];
+          _allAvoidances = [];
           _errorMessage = 'No data found';
+          _isLoading = false;
         });
       } else {
         throw Exception('Failed to load data');
@@ -146,30 +147,21 @@ class _SearchTabPageState extends State<SearchTabPage> {
     } catch (e) {
       setState(() {
         _errorMessage = 'Error fetching data: $e';
+        _isLoading = false;
       });
     }
-  }
-
-  Future<void> _fetchMealSuggestions() async {
-    await _fetchData('http://localhost:3000/api/menu/suggestion');
   }
 
   Future<void> _fetchMealIngredients() async {
     final ingredientsQuery = _selectedChips.join(',');
     final nationalityQuery = _selectedNationalities.join(',');
     final cateforyyQuery = _selectedCategories.join(',');
-    final allergiesQuery = _selectedAllergies.join(',');
-    await _fetchData(
-      'http://localhost:3000/api/menu/ingredients?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&allergies=$allergiesQuery',
-    );
-  }
-
-  Future<void> _fetchData(String url) async {
+    final avoidancesQuery = _selectedAvoidances.join(',');
     setState(() {
       _isLoading = true;
       _errorMessage = '';
     });
-
+    final url = 'http://localhost:3000/api/menu/ingredients?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&avoidances=$avoidancesQuery';
     try {
       final response = await http.get(
         Uri.parse(url),
@@ -223,7 +215,22 @@ class _SearchTabPageState extends State<SearchTabPage> {
               child: Center(child: CircularProgressIndicator()),
             ),
           if (_errorMessage.isNotEmpty) _buildErrorMessage(),
-          if (_mealData.isNotEmpty && !_isLoading) _buildMealGrid(),
+          if (_mealData.isNotEmpty && !_isLoading)
+            _buildMealGrid()
+          else
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Text(
+                    'Enter leftover ingredients to get recipe ideas!',
+                    style: const TextStyle(fontSize: 16, color: Color(0xFF8A8A8A)),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -282,18 +289,18 @@ class _SearchTabPageState extends State<SearchTabPage> {
                     backgroundColor: Colors.white,
                     builder:
                         (context) => FilterBottomSheet(
-                          selectedAllergies: _selectedAllergies,
+                          selectedAvoidances: _selectedAvoidances,
                           selectedCategories: _selectedCategories,
                           selectedNationalities: _selectedNationalities,
                           onApply: ({
-                            required List<String> allergies,
+                            required List<String> avoidances,
                             required List<String> categories,
                             required List<String> nationalities,
                           }) async {
                             setState(() {
-                              _selectedAllergies
+                              _selectedAvoidances
                                 ..clear()
-                                ..addAll(allergies);
+                                ..addAll(avoidances);
                               _selectedCategories
                                 ..clear()
                                 ..addAll(categories);
@@ -303,8 +310,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
                             });
                           },
                           fetchMealIngredients: _fetchMealIngredients,
-                          fetchMealSuggestions: _fetchMealSuggestions,
-                          fetchAllergies: _allAllergies,
+                          fetchAvoidances: _allAvoidances,
                           fetchCategories: _allCategories,
                           fetchNationalities: _allNationalities,
                         ),
@@ -329,10 +335,10 @@ class _SearchTabPageState extends State<SearchTabPage> {
           chips: _selectedChips,
           onChipDeleted: (chip) async {
             setState(() => _selectedChips.remove(chip));
-            if (_selectedChips.isEmpty) {
-              await _fetchMealSuggestions();
-            } else {
+            if (_selectedChips.isNotEmpty) {
               await _fetchMealIngredients();
+            } else {
+              _mealData = [];
             }
           },
         ),

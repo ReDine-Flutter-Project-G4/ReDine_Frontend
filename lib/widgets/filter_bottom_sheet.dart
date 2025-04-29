@@ -4,18 +4,18 @@ import 'search_bar_widget.dart';
 import 'chip_list_widget.dart';
 
 class FilterBottomSheet extends StatefulWidget {
-  final List<String> selectedAllergies;
+  final List<String> selectedAvoidances;
   final List<String> selectedCategories;
   final List<String> selectedNationalities;
 
-  final List<String> fetchAllergies;
+  final List<String> fetchAvoidances;
   final List<String> fetchCategories;
   final List<String> fetchNationalities;
 
   final Future<void> Function() fetchMealIngredients;
 
   final Function({
-    required List<String> allergies,
+    required List<String> avoidances,
     required List<String> categories,
     required List<String> nationalities,
   })
@@ -23,12 +23,12 @@ class FilterBottomSheet extends StatefulWidget {
 
   const FilterBottomSheet({
     super.key,
-    required this.selectedAllergies,
+    required this.selectedAvoidances,
     required this.selectedCategories,
     required this.selectedNationalities,
     required this.onApply,
     required this.fetchMealIngredients,
-    required this.fetchAllergies,
+    required this.fetchAvoidances,
     required this.fetchCategories,
     required this.fetchNationalities,
   });
@@ -38,18 +38,18 @@ class FilterBottomSheet extends StatefulWidget {
 }
 
 class _FilterBottomSheetState extends State<FilterBottomSheet> {
-  final SearchController _allergyController = SearchController();
+  final SearchController _avoidanceController = SearchController();
   final SearchController _categoryController = SearchController();
   final SearchController _nationalityController = SearchController();
 
-  final List<String> _selectedAllergies = [];
+  final List<String> _selectedAvoidances = [];
   final List<String> _selectedCategories = [];
   final List<String> _selectedNationalities = [];
 
   @override
   void initState() {
     super.initState();
-    _selectedAllergies.addAll(widget.selectedAllergies);
+    _selectedAvoidances.addAll(widget.selectedAvoidances);
     _selectedCategories.addAll(widget.selectedCategories);
     _selectedNationalities.addAll(widget.selectedNationalities);
   }
@@ -81,7 +81,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     TextButton(
                       onPressed: () {
                         setState(() {
-                          _selectedAllergies.clear();
+                          _selectedAvoidances.clear();
                           _selectedCategories.clear();
                           _selectedNationalities.clear();
                         });
@@ -114,21 +114,21 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       FilterSectionWidget(
-                        title: 'Allergies',
+                        title: 'Avoidances',
                         hintText: 'e.g., Nuts, Milk, Fish',
-                        controller: _allergyController,
-                        selectedChips: _selectedAllergies,
-                        allSuggestions: widget.fetchAllergies,
+                        controller: _avoidanceController,
+                        selectedChips: _selectedAvoidances,
+                        allSuggestions: widget.fetchAvoidances,
                         onChipAdded: (chip) {
                           setState(() {
-                            if (!_selectedAllergies.contains(chip)) {
-                              _selectedAllergies.add(chip);
+                            if (!_selectedAvoidances.contains(chip)) {
+                              _selectedAvoidances.add(chip);
                             }
                           });
                         },
                         onChipDeleted: (chip) {
                           setState(() {
-                            _selectedAllergies.remove(chip);
+                            _selectedAvoidances.remove(chip);
                           });
                         },
                       ),
@@ -187,18 +187,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    final hasSelected =
-                        (_selectedAllergies.isNotEmpty ||
-                            _selectedCategories.isNotEmpty ||
-                            _selectedNationalities.isNotEmpty);
                     widget.onApply(
-                      allergies: _selectedAllergies,
+                      avoidances: _selectedAvoidances,
                       categories: _selectedCategories,
                       nationalities: _selectedNationalities,
                     );
-                    if (hasSelected) {
-                      widget.fetchMealIngredients();
-                    }
+                    widget.fetchMealIngredients();
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
