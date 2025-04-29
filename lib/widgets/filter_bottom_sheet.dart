@@ -13,7 +13,6 @@ class FilterBottomSheet extends StatefulWidget {
   final List<String> fetchNationalities;
 
   final Future<void> Function() fetchMealIngredients;
-  final Future<void> Function() fetchMealSuggestions;
 
   final Function({
     required List<String> allergies,
@@ -29,7 +28,6 @@ class FilterBottomSheet extends StatefulWidget {
     required this.selectedNationalities,
     required this.onApply,
     required this.fetchMealIngredients,
-    required this.fetchMealSuggestions,
     required this.fetchAllergies,
     required this.fetchCategories,
     required this.fetchNationalities,
@@ -200,8 +198,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     );
                     if (hasSelected) {
                       widget.fetchMealIngredients();
-                    } else {
-                      widget.fetchMealSuggestions();
                     }
                     Navigator.pop(context);
                   },
