@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'utils/tab_bar.dart';
 import 'pages/home_page.dart';
 import 'pages/search_page.dart';
 import 'pages/help_page.dart';
-// import 'pages/detail_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,13 +18,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'ReDine',
       theme: ThemeData(
+        textTheme: GoogleFonts.kanitTextTheme(),
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF54AF75)),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
             foregroundColor: const Color(0xFF54AF75), // Text and Icon color
             overlayColor: Colors.black, // Hover color
-            textStyle: const TextStyle(fontWeight: FontWeight.bold),
+            textStyle: GoogleFonts.kanit(),
           ),
         ),
         scaffoldBackgroundColor: Colors.white,
@@ -32,7 +33,6 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const MainHomePage(),
-        // '/detail': (context) => const DetailPage(),
       },
     );
   }

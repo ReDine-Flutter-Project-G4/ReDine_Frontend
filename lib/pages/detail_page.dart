@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailPage extends StatefulWidget {
@@ -90,13 +91,13 @@ class _DetailPageState extends State<DetailPage> {
                       children: [
                         Text(
                           meal['strMeal'] ?? '',
-                          style: const TextStyle(
+                          style: GoogleFonts.livvic(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        
+
                         const SizedBox(height: 8),
 
                         Wrap(
@@ -128,9 +129,11 @@ class _DetailPageState extends State<DetailPage> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
-                                        child: Text(item['ingredient'] ?? ''),
+                                        child: Text(
+                                          item['ingredient'] ?? ''),
                                       ),
-                                      Text(item['measure'] ?? ''),
+                                      Text(
+                                        item['measure'] ?? ''),
                                     ],
                                   ),
                                 ),
@@ -144,9 +147,7 @@ class _DetailPageState extends State<DetailPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
-                      meal['strInstructions'] ?? '',
-                      style: const TextStyle(fontSize: 16),
-                    ),
+                      meal['strInstructions'] ?? ''),
                   ),
                   const SizedBox(height: 16),
                   const Divider(indent: 10, endIndent: 10),
@@ -160,8 +161,8 @@ class _DetailPageState extends State<DetailPage> {
                     label: const Text(
                       'Watch on YouTube',
                       style: TextStyle(
-                        color: Colors.black,
                         fontWeight: FontWeight.normal,
+                        color: Colors.black,
                       ),
                     ),
                   ),
@@ -181,7 +182,7 @@ class _DetailPageState extends State<DetailPage> {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
       child: Text(
         title,
-        style: const TextStyle(
+        style: GoogleFonts.livvic(
           fontSize: 20,
           color: Color(0xFF54AF75),
           fontWeight: FontWeight.bold,
@@ -197,11 +198,7 @@ class _DetailPageState extends State<DetailPage> {
       visualDensity: VisualDensity.compact,
       label: Text(
         label,
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 12,
-        ),
+        style: TextStyle(color: Colors.white, fontSize: 12),
       ),
       backgroundColor: const Color(0xFF54AF75),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'search_bar_widget.dart';
 import 'chip_list_widget.dart';
 
@@ -69,9 +70,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             Stack(
               alignment: Alignment.center,
               children: [
-                const Text(
+                Text(
                   'Filter',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: GoogleFonts.livvic(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -105,70 +109,73 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 
             // const Divider(),
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FilterSectionWidget(
-                      title: 'Allergies',
-                      hintText: 'e.g., Nuts, Milk, Fish',
-                      controller: _allergyController,
-                      selectedChips: _selectedAllergies,
-                      allSuggestions: widget.fetchAllergies,
-                      onChipAdded: (chip) {
-                        setState(() {
-                          if (!_selectedAllergies.contains(chip)) {
-                            _selectedAllergies.add(chip);
-                          }
-                        });
-                      },
-                      onChipDeleted: (chip) {
-                        setState(() {
-                          _selectedAllergies.remove(chip);
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    FilterSectionWidget(
-                      title: 'Category',
-                      hintText: 'e.g., Vegan, Pasta, Seafood',
-                      controller: _categoryController,
-                      selectedChips: _selectedCategories,
-                      allSuggestions: widget.fetchCategories,
-                      onChipDeleted: (chip) {
-                        setState(() {
-                          _selectedCategories.remove(chip);
-                        });
-                      },
-                      onChipAdded: (chip) {
-                        setState(() {
-                          if (!_selectedCategories.contains(chip)) {
-                            _selectedCategories.add(chip);
-                          }
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    FilterSectionWidget(
-                      title: 'Nationality',
-                      hintText: 'e.g., Italian, Chinese, Indian',
-                      controller: _nationalityController,
-                      selectedChips: _selectedNationalities,
-                      allSuggestions: widget.fetchNationalities,
-                      onChipDeleted: (chip) {
-                        setState(() {
-                          _selectedNationalities.remove(chip);
-                        });
-                      },
-                      onChipAdded: (chip) {
-                        setState(() {
-                          if (!_selectedNationalities.contains(chip)) {
-                            _selectedNationalities.add(chip);
-                          }
-                        });
-                      },
-                    ),
-                  ],
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FilterSectionWidget(
+                        title: 'Allergies',
+                        hintText: 'e.g., Nuts, Milk, Fish',
+                        controller: _allergyController,
+                        selectedChips: _selectedAllergies,
+                        allSuggestions: widget.fetchAllergies,
+                        onChipAdded: (chip) {
+                          setState(() {
+                            if (!_selectedAllergies.contains(chip)) {
+                              _selectedAllergies.add(chip);
+                            }
+                          });
+                        },
+                        onChipDeleted: (chip) {
+                          setState(() {
+                            _selectedAllergies.remove(chip);
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      FilterSectionWidget(
+                        title: 'Category',
+                        hintText: 'e.g., Vegan, Pasta, Seafood',
+                        controller: _categoryController,
+                        selectedChips: _selectedCategories,
+                        allSuggestions: widget.fetchCategories,
+                        onChipDeleted: (chip) {
+                          setState(() {
+                            _selectedCategories.remove(chip);
+                          });
+                        },
+                        onChipAdded: (chip) {
+                          setState(() {
+                            if (!_selectedCategories.contains(chip)) {
+                              _selectedCategories.add(chip);
+                            }
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      FilterSectionWidget(
+                        title: 'Nationality',
+                        hintText: 'e.g., Italian, Chinese, Indian',
+                        controller: _nationalityController,
+                        selectedChips: _selectedNationalities,
+                        allSuggestions: widget.fetchNationalities,
+                        onChipDeleted: (chip) {
+                          setState(() {
+                            _selectedNationalities.remove(chip);
+                          });
+                        },
+                        onChipAdded: (chip) {
+                          setState(() {
+                            if (!_selectedNationalities.contains(chip)) {
+                              _selectedNationalities.add(chip);
+                            }
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -176,42 +183,47 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             const SizedBox(height: 16),
 
             // Apply button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  final hasSelected = (_selectedAllergies.isNotEmpty ||
-                      _selectedCategories.isNotEmpty ||
-                      _selectedNationalities.isNotEmpty);
-                  widget.onApply(
-                    allergies: _selectedAllergies,
-                    categories: _selectedCategories,
-                    nationalities: _selectedNationalities,
-                  );
-                  if (hasSelected) {
-                    widget.fetchMealIngredients();
-                  } else {
-                    widget.fetchMealSuggestions();
-                  }
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF54AF75),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    final hasSelected =
+                        (_selectedAllergies.isNotEmpty ||
+                            _selectedCategories.isNotEmpty ||
+                            _selectedNationalities.isNotEmpty);
+                    widget.onApply(
+                      allergies: _selectedAllergies,
+                      categories: _selectedCategories,
+                      nationalities: _selectedNationalities,
+                    );
+                    if (hasSelected) {
+                      widget.fetchMealIngredients();
+                    } else {
+                      widget.fetchMealSuggestions();
+                    }
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF54AF75),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                   ),
-                ),
-                child: const Text(
-                  'Apply',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                  child: Text(
+                    'Apply',
+                    style: GoogleFonts.livvic(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
             ),
+            const SizedBox(height: 16),
           ],
         ),
       ),
@@ -248,7 +260,7 @@ class FilterSectionWidget extends StatelessWidget {
         // Title
         Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: GoogleFonts.livvic(fontWeight: FontWeight.w700, fontSize: 18),
         ),
         const SizedBox(height: 8),
 
