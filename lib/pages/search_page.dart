@@ -303,7 +303,6 @@ class _SearchTabPageState extends State<SearchTabPage> {
                             });
                           },
                           fetchMealIngredients: _fetchMealIngredients,
-                          fetchMealSuggestions: _fetchMealSuggestions,
                           fetchAllergies: _allAllergies,
                           fetchCategories: _allCategories,
                           fetchNationalities: _allNationalities,
