@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class DetailPage extends StatefulWidget {
   final Map<String, dynamic> meal;
@@ -12,6 +13,27 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  late YoutubePlayerController _youtubeController;
+
+  @override
+  void initState() {
+    super.initState();
+    final videoId = _extractYoutubeId(widget.meal['strYoutube']);
+    _youtubeController = YoutubePlayerController(
+      initialVideoId: videoId ?? '',
+      params: const YoutubePlayerParams(
+        showFullscreenButton: true,
+        autoPlay: false,
+      ),
+    );
+  }
+
+  String? _extractYoutubeId(String? url) {
+    if (url == null || url.isEmpty) return null;
+    final uri = Uri.tryParse(url);
+    return uri?.queryParameters['v'];
+  }
+
   List<Map<String, String>> getIngredients(Map<String, dynamic> meal) {
     final ingredients = <Map<String, String>>[];
     for (int i = 1; i <= 20; i++) {
@@ -58,7 +80,7 @@ class _DetailPageState extends State<DetailPage> {
                   fit: BoxFit.cover,
                 ),
                 Positioned(
-                  top: 40,
+                  top: 16,
                   left: 16,
                   child: CircleAvatar(
                     backgroundColor: const Color(0xFF54AF75),
@@ -66,6 +88,7 @@ class _DetailPageState extends State<DetailPage> {
                       icon: const Icon(
                         Icons.arrow_back_ios_new,
                         color: Colors.white,
+                        size: 24,
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
@@ -86,7 +109,7 @@ class _DetailPageState extends State<DetailPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                   const SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Center(
                     child: Column(
                       children: [
@@ -130,11 +153,9 @@ class _DetailPageState extends State<DetailPage> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
-                                        child: Text(
-                                          item['ingredient'] ?? ''),
+                                        child: Text(item['ingredient'] ?? ''),
                                       ),
-                                      Text(
-                                        item['measure'] ?? ''),
+                                      Text(item['measure'] ?? ''),
                                     ],
                                   ),
                                 ),
@@ -147,8 +168,7 @@ class _DetailPageState extends State<DetailPage> {
                   _buildSectionTitle('Instructions'),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Text(
-                      meal['strInstructions'] ?? ''),
+                    child: Text(meal['strInstructions'] ?? ''),
                   ),
                   const SizedBox(height: 16),
                   const Divider(indent: 10, endIndent: 10),
@@ -160,12 +180,16 @@ class _DetailPageState extends State<DetailPage> {
                       scale: 8,
                     ),
                     label: const Text(
-                      'Watch on YouTube',
+                      'YouTube',
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
                         color: Colors.black,
                       ),
                     ),
+                  ),
+                  SizedBox(
+                    height: 250,
+                    child: YoutubePlayerIFrame(controller: _youtubeController),
                   ),
 
                   const SizedBox(height: 20),
@@ -197,10 +221,7 @@ class _DetailPageState extends State<DetailPage> {
     return Chip(
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       visualDensity: VisualDensity.compact,
-      label: Text(
-        label,
-        style: TextStyle(color: Colors.white, fontSize: 12),
-      ),
+      label: Text(label, style: TextStyle(color: Colors.white, fontSize: 12)),
       backgroundColor: const Color(0xFF54AF75),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     );
