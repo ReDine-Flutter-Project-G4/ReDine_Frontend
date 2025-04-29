@@ -65,7 +65,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             ),
 
             const SizedBox(height: 8),
-            const Divider(),
+            // const Divider(),
 
             Expanded(
               child: SingleChildScrollView(
