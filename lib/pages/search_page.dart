@@ -57,13 +57,11 @@ class _SearchTabPageState extends State<SearchTabPage> {
         final jsonResponse = json.decode(response.body);
         setState(() {
           _allIngredients = List<String>.from(jsonResponse['ingredients']);
-          _isLoading = false;
         });
       } else if (response.statusCode == 404) {
         setState(() {
           _allIngredients = [];
           _errorMessage = 'No data found';
-          _isLoading = false;
         });
       } else {
         throw Exception('Failed to load data');
@@ -71,7 +69,6 @@ class _SearchTabPageState extends State<SearchTabPage> {
     } catch (e) {
       setState(() {
         _errorMessage = 'Error fetching data: $e';
-        _isLoading = false;
       });
     }
   }
