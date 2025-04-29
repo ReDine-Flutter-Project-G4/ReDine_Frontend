@@ -75,7 +75,7 @@ class _DetailPageState extends State<DetailPage> {
             ),
             Container(
               transform: Matrix4.translationValues(0.0, -250.0, 0.0),
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(30),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -86,6 +86,7 @@ class _DetailPageState extends State<DetailPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                   const SizedBox(height: 16),
                   Center(
                     child: Column(
                       children: [
