@@ -67,7 +67,7 @@ class _MainHomePageState extends State<MainHomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Colors.white,
       body: TabBarView(
         controller: _tabController,
         children: [
