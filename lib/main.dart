@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'utils/tab_bar.dart';
+import 'pages/home_page.dart';
+import 'pages/search_page.dart';
+import 'pages/help_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,27 +11,26 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'ReDine',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF54AF75)),
       ),
-      home: const HomePage(),
+      home: const MainHomePage(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class MainHomePage extends StatefulWidget {
+  const MainHomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<MainHomePage> createState() => _MainHomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+class _MainHomePageState extends State<MainHomePage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -36,13 +38,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
-      setState(() {}); // Rebuild when tab index changes
+      setState(() {});
     });
   }
 
   @override
   void dispose() {
-    _tabController.dispose(); // Always dispose controllers!
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -52,10 +54,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       backgroundColor: Colors.grey[200],
       body: TabBarView(
         controller: _tabController,
-        children: const [
-          Center(child: Text('Home Page')),
-          Center(child: Text('Search Page')),
-          Center(child: Text('Help Page')),
+        children: [
+          const HomeTabPage(),
+          SearchTabPage(tabController: _tabController),
+          const HelpTabPage(),
         ],
       ),
       bottomNavigationBar: CustomTabBar(
@@ -64,4 +66,3 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 }
-
