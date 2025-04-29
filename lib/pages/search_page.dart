@@ -3,11 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../pages/detail_page.dart';
-
 import '../widgets/search_bar_widget.dart';
 import '../widgets/chip_list_widget.dart';
 import '../widgets/filter_bottom_sheet.dart';
-
 import '../utils/card.dart' as custom_card;
 
 class SearchTabPage extends StatefulWidget {

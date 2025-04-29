@@ -21,9 +21,7 @@ class _DetailPageState extends State<DetailPage> {
     final videoId = _extractYoutubeId(widget.meal['strYoutube']);
     _youtubeController = YoutubePlayerController.fromVideoId(
       videoId: videoId ?? '',
-      params: const YoutubePlayerParams(
-        showFullscreenButton: true,
-      ),
+      params: const YoutubePlayerParams(showFullscreenButton: true),
       autoPlay: false,
     );
   }
