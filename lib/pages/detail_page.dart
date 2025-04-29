@@ -58,7 +58,7 @@ class _DetailPageState extends State<DetailPage> {
                   fit: BoxFit.cover,
                 ),
                 Positioned(
-                  top: 40,
+                  top: 16,
                   left: 16,
                   child: CircleAvatar(
                     backgroundColor: const Color(0xFF54AF75),
@@ -66,6 +66,7 @@ class _DetailPageState extends State<DetailPage> {
                       icon: const Icon(
                         Icons.arrow_back_ios_new,
                         color: Colors.white,
+                        size: 24,
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
