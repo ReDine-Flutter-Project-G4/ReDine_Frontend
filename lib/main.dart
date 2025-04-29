@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'utils/tab_bar.dart';
 import 'pages/home_page.dart';
 import 'pages/search_page.dart';
 import 'pages/help_page.dart';
+import 'pages/detail_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,10 +17,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ReDine',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF54AF75)),
-      ),
-      home: const MainHomePage(),
+      theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MainHomePage(),
+        '/detail': (context) => const DetailPage(),
+      },
     );
   }
 }
@@ -30,7 +34,8 @@ class MainHomePage extends StatefulWidget {
   State<MainHomePage> createState() => _MainHomePageState();
 }
 
-class _MainHomePageState extends State<MainHomePage> with SingleTickerProviderStateMixin {
+class _MainHomePageState extends State<MainHomePage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -60,9 +65,7 @@ class _MainHomePageState extends State<MainHomePage> with SingleTickerProviderSt
           const HelpTabPage(),
         ],
       ),
-      bottomNavigationBar: CustomTabBar(
-        tabController: _tabController,
-      ),
+      bottomNavigationBar: CustomTabBar(tabController: _tabController),
     );
   }
 }
