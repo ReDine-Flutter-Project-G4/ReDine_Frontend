@@ -4,7 +4,7 @@ import 'utils/tab_bar.dart';
 import 'pages/home_page.dart';
 import 'pages/search_page.dart';
 import 'pages/help_page.dart';
-import 'pages/detail_page.dart';
+// import 'pages/detail_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const MainHomePage(),
-        '/detail': (context) => const DetailPage(),
+        // '/detail': (context) => const DetailPage(),
       },
     );
   }
