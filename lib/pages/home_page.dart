@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import '../widgets/card.dart' as custom_card;
+import '../widgets/meal_card.dart' as custom_card;
 
 class HomeTabPage extends StatefulWidget {
   const HomeTabPage({super.key});
@@ -48,7 +48,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
                   ),
                   itemBuilder: (context, index) {
                     final meal = mockData[index];
-                    return custom_card.Card(
+                    return custom_card.MealCard(
                       strMeal: meal['strMeal'],
                       strMealThumb: meal['strMealThumb'],
                       strArea: meal['strArea'],

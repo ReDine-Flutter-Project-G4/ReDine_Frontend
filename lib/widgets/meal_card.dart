@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Card extends StatelessWidget {
-  const Card({
+class MealCard extends StatelessWidget {
+  const MealCard({
     super.key,
     required this.strMeal,
     required this.strMealThumb,

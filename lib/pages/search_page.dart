@@ -6,7 +6,7 @@ import '../pages/detail_page.dart';
 import '../components/search_bar.dart';
 import '../components/chip_list.dart';
 import '../components/filter_bottom_sheet.dart';
-import '../widgets/card.dart' as custom_card;
+import '../widgets/meal_card.dart' as custom_card;
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> _saveAvoidancesToCache(List<String> avoidances) async {
@@ -405,7 +405,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
                 MaterialPageRoute(builder: (context) => DetailPage(meal: meal)),
               );
             },
-            child: custom_card.Card(
+            child: custom_card.MealCard(
               strMeal: meal['strMeal'],
               strMealThumb: meal['strMealThumb'],
               strArea: meal['strArea'],
