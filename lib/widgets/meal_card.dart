@@ -21,8 +21,7 @@ class MealCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final double cardHeight = constraints.maxHeight;
-        final int maxLines = (cardHeight / 75).clamp(2, 4).floor();
+        final int maxLines = (constraints.maxHeight / 75).clamp(2, 4).floor();
 
         return Container(
           decoration: BoxDecoration(
@@ -38,50 +37,71 @@ class MealCard extends StatelessWidget {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(9),
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(7),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: MediaQuery.of(context).size.height * 0.14,
-                      child: Image.network(strMealThumb, fit: BoxFit.cover),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Image
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(7),
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: Image.network(
+                      strMealThumb,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.broken_image),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    strMeal,
-                    style: GoogleFonts.livvic(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 5),
-                  Wrap(
-                    spacing: 6,
-                    children: [_buildTag(strArea), _buildTag(strCategory)],
-                  ),
-                  const SizedBox(height: 5),
-                  RichText(
-                    text: TextSpan(
-                      style: const TextStyle(
-                        fontSize: 10,
-                        color: Color(0xFF020202),
-                      ),
+                ),
+
+                // Content
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const TextSpan(text: 'Ingredient: '),
-                        TextSpan(text: strIngredients.join(', ')),
+                        Text(
+                          strMeal,
+                          style: GoogleFonts.livvic(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 5),
+
+                        Wrap(
+                          spacing: 6,
+                          children: [
+                            _buildTag(strArea),
+                            _buildTag(strCategory),
+                          ],
+                        ),
+                        const SizedBox(height: 5),
+
+                        Expanded(
+                          child: RichText(
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: maxLines,
+                            text: TextSpan(
+                              style: const TextStyle(
+                                fontSize: 10,
+                                color: Color(0xFF020202),
+                              ),
+                              children: [
+                                const TextSpan(text: 'Ingredient: '),
+                                TextSpan(text: strIngredients.join(', ')),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                    maxLines: maxLines,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         );
@@ -98,7 +118,7 @@ class MealCard extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 8,
           color: Colors.white,
           fontWeight: FontWeight.w500,

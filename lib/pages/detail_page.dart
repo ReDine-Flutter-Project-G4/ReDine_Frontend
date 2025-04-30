@@ -121,7 +121,7 @@ class _DetailPageState extends State<DetailPage> {
                         Text(
                           meal['strMeal'] ?? '',
                           style: GoogleFonts.livvic(
-                            fontSize: 22,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                           textAlign: TextAlign.center,
@@ -211,7 +211,7 @@ class _DetailPageState extends State<DetailPage> {
       child: Text(
         title,
         style: GoogleFonts.livvic(
-          fontSize: 20,
+          fontSize: 14,
           color: Color(0xFF54AF75),
           fontWeight: FontWeight.bold,
         ),
@@ -224,7 +224,7 @@ class _DetailPageState extends State<DetailPage> {
     return Chip(
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       visualDensity: VisualDensity.compact,
-      label: Text(label, style: TextStyle(color: Colors.white, fontSize: 12)),
+      label: Text(label, style: TextStyle(color: Colors.white, fontSize: 10)),
       backgroundColor: const Color(0xFF54AF75),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     );

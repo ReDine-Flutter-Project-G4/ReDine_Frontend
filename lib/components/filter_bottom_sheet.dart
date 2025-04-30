@@ -71,7 +71,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 Text(
                   'Filter',
                   style: GoogleFonts.livvic(
-                    fontSize: 20,
+                    fontSize: 16,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -205,7 +205,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   child: Text(
                     'Apply',
                     style: GoogleFonts.livvic(
-                      fontSize: 16,
+                      fontSize: 12,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
                     ),
@@ -254,7 +254,7 @@ class FilterSectionWidget extends StatelessWidget {
               title,
               style: GoogleFonts.livvic(
                 fontWeight: FontWeight.w700,
-                fontSize: 18,
+                fontSize: 14,
               ),
             ),
             if (title == 'Avoidance')
@@ -262,7 +262,7 @@ class FilterSectionWidget extends StatelessWidget {
                 '   *Recipe with these will be excluded.' ,
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
-                  fontSize: 10,
+                  fontSize: 8,
                   color: Color(0xFF8A8A8A),
                 ),
               ),
