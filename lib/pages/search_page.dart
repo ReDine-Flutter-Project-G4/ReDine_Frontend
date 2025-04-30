@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../pages/detail_page.dart';
-import '../widgets/search_bar_widget.dart';
-import '../widgets/chip_list_widget.dart';
-import '../widgets/filter_bottom_sheet.dart';
-import '../utils/card.dart' as custom_card;
+import '../components/search_bar_widget.dart';
+import '../components/chip_list_widget.dart';
+import '../components/filter_bottom_sheet.dart';
+import '../widgets/card.dart' as custom_card;
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> _saveAvoidancesToCache(List<String> avoidances) async {
