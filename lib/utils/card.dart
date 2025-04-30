@@ -22,7 +22,7 @@ class Card extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final double cardHeight = constraints.maxHeight;
-        final int maxLines = (cardHeight / 68).clamp(2, 4).floor();
+        final int maxLines = (cardHeight / 75).clamp(2, 4).floor();
 
         return Container(
           decoration: BoxDecoration(
