@@ -53,7 +53,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = 'http://localhost:3000/api/meta/categories';
+    final url = 'http://0.0.0.0:3000/api/meta/categories';
     try {
       final response = await http.get(
         Uri.parse(url),
@@ -84,7 +84,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = 'http://localhost:3000/api/meta/areas';
+    final url = 'http://0.0.0.0:3000/api/meta/areas';
 
     try {
       final response = await http.get(
@@ -117,7 +117,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = 'http://localhost:3000/api/meta/ingredients';
+    final url = 'http://0.0.0.0:3000/api/meta/ingredients';
 
     try {
       final response = await http.get(
@@ -160,7 +160,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _errorMessage = '';
     });
     final url =
-        'http://localhost:3000/api/menu/ingredients?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&avoidances=$avoidancesQuery';
+        'http://0.0.0.0:3000/api/menu/ingredients?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&avoidances=$avoidancesQuery';
     try {
       final response = await http.get(
         Uri.parse(url),
@@ -383,7 +383,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
           crossAxisCount: 2,
           mainAxisSpacing: 18,
           crossAxisSpacing: 18,
-          childAspectRatio: 2 / 2.5,
+          childAspectRatio: 2 / 2.6,
         ),
       ),
     );

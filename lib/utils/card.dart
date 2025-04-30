@@ -20,8 +20,6 @@ class Card extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 153,
-      height: 800,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(9),
@@ -44,7 +42,7 @@ class Card extends StatelessWidget {
                 borderRadius: BorderRadius.circular(7),
                 child: SizedBox(
                   width: double.infinity,
-                  height: 110,
+                  height: MediaQuery.of(context).size.height * 0.14,
                   child: Image.network(strMealThumb, fit: BoxFit.cover),
                 ),
               ),
@@ -94,7 +92,7 @@ class Card extends StatelessWidget {
       child: Text(
         label,
         style: TextStyle(
-          fontSize: 10,
+          fontSize: 8,
           color: Colors.white,
           fontWeight: FontWeight.w500,
         ),
