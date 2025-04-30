@@ -96,7 +96,7 @@ class _DetailPageState extends State<DetailPage> {
             ),
             Container(
               transform: Matrix4.translationValues(0.0, -250.0, 0.0),
-              padding: const EdgeInsets.all(30),
+              padding: const EdgeInsets.all(25),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -114,7 +114,6 @@ class _DetailPageState extends State<DetailPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 16),
                   Center(
                     child: Column(
                       children: [
@@ -147,25 +146,31 @@ class _DetailPageState extends State<DetailPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Column(
                       children:
-                          getIngredients(meal)
-                              .map(
-                                (item) => Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 4,
+                          getIngredients(meal).map((item) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      item['ingredient'] ?? '',
+                                      style: const TextStyle(fontSize: 10),
+                                    ),
                                   ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Text(item['ingredient'] ?? ''),
-                                      ),
-                                      Text(item['measure'] ?? ''),
-                                    ],
+                                  Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      item['measure'] ?? '',
+                                      style: const TextStyle(fontSize: 10),
+                                      textAlign: TextAlign.right,
+                                    ),
                                   ),
-                                ),
-                              )
-                              .toList(),
+                                ],
+                              ),
+                            );
+                          }).toList(),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -173,7 +178,10 @@ class _DetailPageState extends State<DetailPage> {
                   _buildSectionTitle('Instructions'),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Text(meal['strInstructions'] ?? ''),
+                    child: Text(
+                      meal['strInstructions'] ?? '',
+                      style: TextStyle(fontSize: 10),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   const Divider(indent: 10, endIndent: 10),
