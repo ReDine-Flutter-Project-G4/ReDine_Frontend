@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'utils/tab_bar.dart';
+import 'widgets/tab_bar.dart';
 import 'pages/home_page.dart';
 import 'pages/search_page.dart';
 import 'pages/help_page.dart';
