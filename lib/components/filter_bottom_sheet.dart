@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'search_bar_widget.dart';
-import 'chip_list_widget.dart';
+import 'search_bar.dart';
+import 'chip_list.dart';
 
 class FilterBottomSheet extends StatefulWidget {
   final List<String> selectedAvoidances;
