@@ -103,6 +103,14 @@ class _DetailPageState extends State<DetailPage> {
                   topLeft: Radius.circular(30),
                   topRight: Radius.circular(30),
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 15,
+                    spreadRadius: 5,
+                    offset: const Offset(0, 5), // horizontal, vertical offset
+                  ),
+                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

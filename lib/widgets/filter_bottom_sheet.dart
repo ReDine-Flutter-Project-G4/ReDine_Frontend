@@ -248,10 +248,27 @@ class FilterSectionWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Title
-        Text(
-          title,
-          style: GoogleFonts.livvic(fontWeight: FontWeight.w700, fontSize: 18),
+        Row(
+          children: [
+            Text(
+              title,
+              style: GoogleFonts.livvic(
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+              ),
+            ),
+            if (title == 'Avoidance')
+              Text(
+                '   *Recipe with these will be excluded.' ,
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 10,
+                  color: Color(0xFF8A8A8A),
+                ),
+              ),
+          ],
         ),
+
         const SizedBox(height: 8),
 
         // Reuse SearchBarWidget
