@@ -277,56 +277,74 @@ class _SearchTabPageState extends State<SearchTabPage> {
               ),
             ),
             const SizedBox(width: 8),
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: isFilterOpen ? Color(0xFF54AF75) : Color(0xFFB6B6B6),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.tune, color: Colors.white, size: 28),
-                onPressed: () async {
-                  setState(() {
-                    isFilterOpen = true;
-                  });
-                  await showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.white,
-                    builder:
-                        (context) => FilterBottomSheet(
-                          selectedAvoidances: _selectedAvoidances,
-                          selectedCategories: _selectedCategories,
-                          selectedNationalities: _selectedNationalities,
-                          onApply: ({
-                            required List<String> avoidances,
-                            required List<String> categories,
-                            required List<String> nationalities,
-                          }) async {
-                            setState(() {
-                              _selectedAvoidances
-                                ..clear()
-                                ..addAll(avoidances);
-                              _selectedCategories
-                                ..clear()
-                                ..addAll(categories);
-                              _selectedNationalities
-                                ..clear()
-                                ..addAll(nationalities);
-                            });
-                          },
-                          fetchMealIngredients: _fetchMealIngredients,
-                          fetchAvoidances: _allAvoidances,
-                          fetchCategories: _allCategories,
-                          fetchNationalities: _allNationalities,
-                        ),
-                  );
-                  setState(() {
-                    isFilterOpen = false;
-                  });
-                },
-              ),
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: isFilterOpen ? Color(0xFF54AF75) : Color(0xFFB6B6B6),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.tune, color: Colors.white, size: 28),
+                    onPressed: () async {
+                      setState(() {
+                        isFilterOpen = true;
+                      });
+                      await showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.white,
+                        builder:
+                            (context) => FilterBottomSheet(
+                              selectedAvoidances: _selectedAvoidances,
+                              selectedCategories: _selectedCategories,
+                              selectedNationalities: _selectedNationalities,
+                              onApply: ({
+                                required List<String> avoidances,
+                                required List<String> categories,
+                                required List<String> nationalities,
+                              }) async {
+                                setState(() {
+                                  _selectedAvoidances
+                                    ..clear()
+                                    ..addAll(avoidances);
+                                  _selectedCategories
+                                    ..clear()
+                                    ..addAll(categories);
+                                  _selectedNationalities
+                                    ..clear()
+                                    ..addAll(nationalities);
+                                });
+                              },
+                              fetchMealIngredients: _fetchMealIngredients,
+                              fetchAvoidances: _allAvoidances,
+                              fetchCategories: _allCategories,
+                              fetchNationalities: _allNationalities,
+                            ),
+                      );
+                      setState(() {
+                        isFilterOpen = false;
+                      });
+                    },
+                  ),
+                ),
+                // Green Circle
+                if (_selectedAvoidances.isNotEmpty ||
+                    _selectedCategories.isNotEmpty ||
+                    _selectedNationalities.isNotEmpty)
+                  Positioned(
+                    top: -3,
+                    right: -3,
+                    child: Icon(
+                      Icons.circle,
+                      color: Color(0xFF54AF75),
+                      size: 15,
+                    ),
+                  ),
+              ],
             ),
           ],
         ),
