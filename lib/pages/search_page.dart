@@ -28,6 +28,7 @@ class SearchTabPage extends StatefulWidget {
 }
 
 class _SearchTabPageState extends State<SearchTabPage> {
+  static const String baseUrl = 'http://localhost:3000/api';
   late final SearchController _searchController;
 
   final List<String> _selectedAvoidances = [];
@@ -69,7 +70,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = 'http://10.4.155.68:3000/api/meta/categories';
+    final url = '$baseUrl/meta/categories';
     try {
       final response = await http.get(
         Uri.parse(url),
@@ -100,7 +101,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = 'http://10.4.155.68:3000/api/meta/areas';
+    final url = '$baseUrl/meta/areas';
 
     try {
       final response = await http.get(
@@ -133,7 +134,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = 'http://10.4.155.68:3000/api/meta/ingredients';
+    final url = '$baseUrl/meta/ingredients';
 
     try {
       final response = await http.get(
@@ -176,7 +177,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _errorMessage = '';
     });
     final url =
-        'http://10.4.155.68:3000/api/menu/ingredients?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&avoidances=$avoidancesQuery';
+        '$baseUrl/menu/ingredients?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&avoidances=$avoidancesQuery';
     try {
       final response = await http.get(
         Uri.parse(url),
