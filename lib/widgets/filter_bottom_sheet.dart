@@ -114,7 +114,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       FilterSectionWidget(
-                        title: 'Avoidances',
+                        title: 'Avoidance',
                         hintText: 'e.g., Nuts, Milk, Fish',
                         controller: _avoidanceController,
                         selectedChips: _selectedAvoidances,

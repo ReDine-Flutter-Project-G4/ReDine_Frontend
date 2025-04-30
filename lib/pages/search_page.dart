@@ -7,6 +7,17 @@ import '../widgets/search_bar_widget.dart';
 import '../widgets/chip_list_widget.dart';
 import '../widgets/filter_bottom_sheet.dart';
 import '../utils/card.dart' as custom_card;
+import 'package:shared_preferences/shared_preferences.dart';
+
+Future<void> _saveAvoidancesToCache(List<String> avoidances) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setStringList('selectedAvoidances', avoidances);
+}
+
+Future<List<String>> _loadAvoidancesFromCache() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getStringList('selectedAvoidances') ?? [];
+}
 
 class SearchTabPage extends StatefulWidget {
   final TabController tabController;
@@ -37,6 +48,11 @@ class _SearchTabPageState extends State<SearchTabPage> {
   void initState() {
     super.initState();
     _searchController = SearchController();
+    _loadAvoidancesFromCache().then((data) {
+      setState(() {
+        _selectedAvoidances.addAll(data);
+      });
+    });
     _fetchIngredients();
     _fetchCategories();
     _fetchNationality();
@@ -318,6 +334,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
                                     ..clear()
                                     ..addAll(nationalities);
                                 });
+                                await _saveAvoidancesToCache(avoidances);
                               },
                               fetchMealIngredients: _fetchMealIngredients,
                               fetchAvoidances: _allAvoidances,
