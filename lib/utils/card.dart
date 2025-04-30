@@ -19,66 +19,73 @@ class Card extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(9),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 3,
-            offset: const Offset(2, 2),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(9),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(7),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.14,
-                  child: Image.network(strMealThumb, fit: BoxFit.cover),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                strMeal,
-                style: GoogleFonts.livvic(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 5),
-              Wrap(
-                spacing: 6,
-                children: [_buildTag(strArea), _buildTag(strCategory)],
-              ),
-              const SizedBox(height: 5),
-              RichText(
-                text: TextSpan(
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: const Color(0xFF020202),
-                  ),
-                  children: [
-                    const TextSpan(text: 'Ingredient: '),
-                    TextSpan(text: strIngredients.join(', ')),
-                  ],
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double cardHeight = constraints.maxHeight;
+        final int maxLines = (cardHeight / 68).clamp(2, 4).floor();
+
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(9),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 3,
+                offset: const Offset(2, 2),
               ),
             ],
           ),
-        ),
-      ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(9),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(7),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.14,
+                      child: Image.network(strMealThumb, fit: BoxFit.cover),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    strMeal,
+                    style: GoogleFonts.livvic(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 5),
+                  Wrap(
+                    spacing: 6,
+                    children: [_buildTag(strArea), _buildTag(strCategory)],
+                  ),
+                  const SizedBox(height: 5),
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: Color(0xFF020202),
+                      ),
+                      children: [
+                        const TextSpan(text: 'Ingredient: '),
+                        TextSpan(text: strIngredients.join(', ')),
+                      ],
+                    ),
+                    maxLines: maxLines,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
