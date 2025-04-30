@@ -12,7 +12,7 @@ class CustomTabBar extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         Container(
-          height: 85,
+          height: 70,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: const BorderRadius.only(
@@ -108,7 +108,7 @@ class _DotPainter extends BoxPainter {
 
     final Offset circleOffset = Offset(
       offset.dx + configuration.size!.width / 2,
-      offset.dy + configuration.size!.height - 25,
+      offset.dy + configuration.size!.height - 18,
     );
 
     canvas.drawCircle(circleOffset, 3, paint);
