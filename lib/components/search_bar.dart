@@ -41,7 +41,7 @@ class SearchBarWidget extends StatelessWidget {
 
           return suggestions.map((item) {
             return ListTile(
-              title: Text(item),
+              title: Text(item, style: TextStyle(fontSize: 12),),
               onTap: () {
                 onItemSelected(item);
                 controller.closeView(controller.text);

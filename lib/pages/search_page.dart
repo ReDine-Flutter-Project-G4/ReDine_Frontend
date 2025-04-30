@@ -247,7 +247,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
                   child: Text(
                     'Enter leftover ingredients to get recipe ideas!',
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 12,
                       color: Color(0xFF8A8A8A),
                     ),
                     textAlign: TextAlign.center,

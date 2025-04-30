@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:redine_frontend/widgets/chip_tag.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
@@ -132,8 +133,8 @@ class _DetailPageState extends State<DetailPage> {
                           spacing: 8,
                           alignment: WrapAlignment.center,
                           children: [
-                            _buildTagChip(meal['strArea']),
-                            _buildTagChip(meal['strCategory']),
+                            ChipTag(label: meal['strArea']),
+                            ChipTag(label: meal['strCategory']),
                           ],
                         ),
                       ],
@@ -224,17 +225,6 @@ class _DetailPageState extends State<DetailPage> {
           fontWeight: FontWeight.bold,
         ),
       ),
-    );
-  }
-
-  Widget _buildTagChip(String? label) {
-    if (label == null || label.isEmpty) return const SizedBox.shrink();
-    return Chip(
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      visualDensity: VisualDensity.compact,
-      label: Text(label, style: TextStyle(color: Colors.white, fontSize: 10)),
-      backgroundColor: const Color(0xFF54AF75),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     );
   }
 }

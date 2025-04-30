@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:redine_frontend/widgets/chip_tag.dart';
 
 class MealCard extends StatelessWidget {
   const MealCard({
@@ -75,8 +76,8 @@ class MealCard extends StatelessWidget {
                         Wrap(
                           spacing: 6,
                           children: [
-                            _buildTag(strArea),
-                            _buildTag(strCategory),
+                            ChipTag(label: strArea),
+                            ChipTag(label: strCategory),
                           ],
                         ),
                         const SizedBox(height: 5),
@@ -106,24 +107,6 @@ class MealCard extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildTag(String label) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: const Color(0xFF54AF75),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          fontSize: 8,
-          color: Colors.white,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
     );
   }
 }
