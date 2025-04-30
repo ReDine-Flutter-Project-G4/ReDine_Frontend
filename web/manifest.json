@@ -1,11 +1,11 @@
 {
     "name": "redine_frontend",
-    "short_name": "redine_frontend",
+    "short_name": "redine",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#54AF75",
+    "theme_color": "#54AF75",
+    "description": "A smart cooking assistant that helps you decide what to cook based on the ingredients you already have.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

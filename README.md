@@ -1,6 +1,6 @@
-# redine_frontend
+# redine
 
-A new Flutter project.
+A smart cooking assistant that helps you decide what to cook based on the ingredients you already have.
 
 ## Getting Started
 
