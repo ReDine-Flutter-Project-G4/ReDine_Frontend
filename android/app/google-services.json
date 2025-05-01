@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "922825205086",
+    "project_id": "redine-dc9f2",
+    "storage_bucket": "redine-dc9f2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922825205086:android:51be50f82a46ac87589bcf",
+        "android_client_info": {
+          "package_name": "com.example.redine_frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAajwq3zR4-XklESdDE9xcKwwovalfAQ9g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
