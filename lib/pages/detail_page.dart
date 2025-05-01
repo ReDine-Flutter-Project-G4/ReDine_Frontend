@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:redine_frontend/widgets/chip_tag.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:colorful_iconify_flutter/icons/logos.dart';
 
 class DetailPage extends StatefulWidget {
   final Map<String, dynamic> meal;
@@ -138,7 +140,7 @@ class _DetailPageState extends State<DetailPage> {
                       _buildSectionTitle('Tutorial Video'),
                       TextButton.icon(
                         onPressed: _launchYoutube,
-                        icon: Image.asset('assets/youtube_logo.png', scale: 8),
+                        icon: Iconify(Logos.youtube_icon, size: 10),
                         label: const Text(
                           'YouTube',
                           style: TextStyle(color: Colors.black, fontSize: 10),
