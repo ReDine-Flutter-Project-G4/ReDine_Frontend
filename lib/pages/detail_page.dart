@@ -61,6 +61,7 @@ class _DetailPageState extends State<DetailPage> {
           CustomScrollView(
             slivers: [
               SliverAppBar(
+                forceMaterialTransparency: true,
                 expandedHeight: 150,
                 floating: true,
                 snap: true,
@@ -77,7 +78,6 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                   ),
                 ),
-                backgroundColor: Colors.transparent,
               ),
               SliverToBoxAdapter(
                 child: Container(

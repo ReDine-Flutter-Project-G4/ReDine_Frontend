@@ -264,6 +264,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
     return SliverAppBar(
       backgroundColor: Colors.transparent,
       floating: true,
+      forceMaterialTransparency: true,
       automaticallyImplyLeading: false,
       titleSpacing: 0,
       toolbarHeight: 70,
