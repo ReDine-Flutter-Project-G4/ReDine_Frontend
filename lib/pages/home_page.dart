@@ -7,7 +7,7 @@ class HomeTabPage extends StatefulWidget {
   const HomeTabPage({super.key});
 
   @override
-  _HomeTabPageState createState() => _HomeTabPageState();
+  State<HomeTabPage> createState() => _HomeTabPageState();
 }
 
 class _HomeTabPageState extends State<HomeTabPage> {

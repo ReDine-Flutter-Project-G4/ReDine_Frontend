@@ -24,11 +24,11 @@ class SearchBarWidget extends StatelessWidget {
         searchController: searchController,
         barHintText: barHintText,
         barHintStyle: WidgetStatePropertyAll(
-          const TextStyle(fontSize: 14, color: Color(0xFF8A8A8A)),
+          const TextStyle(fontSize: 12, color: Color(0xFF8A8A8A)),
         ),
         viewHeaderHeight: 40,
-        viewHeaderTextStyle: TextStyle(fontSize: 14),
-        viewHeaderHintStyle: TextStyle(fontSize: 14, color: Color(0xFF8A8A8A)),
+        viewHeaderTextStyle: TextStyle(fontSize: 12),
+        viewHeaderHintStyle: TextStyle(fontSize: 12, color: Color(0xFF8A8A8A)),
         dividerColor: Color(0xFF8A8A8A),
         isFullScreen: false,
         barBackgroundColor: WidgetStatePropertyAll(Colors.white),
@@ -41,7 +41,7 @@ class SearchBarWidget extends StatelessWidget {
 
           return suggestions.map((item) {
             return ListTile(
-              title: Text(item),
+              title: Text(item, style: TextStyle(fontSize: 12),),
               onTap: () {
                 onItemSelected(item);
                 controller.closeView(controller.text);

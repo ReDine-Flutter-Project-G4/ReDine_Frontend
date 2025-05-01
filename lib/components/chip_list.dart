@@ -25,7 +25,7 @@ class ChipListWidget extends StatelessWidget {
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 12,
+                  fontSize: 10,
                 ),
               ),
               backgroundColor: const Color(0xFF54AF75),
