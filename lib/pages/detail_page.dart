@@ -62,7 +62,7 @@ class _DetailPageState extends State<DetailPage> {
             slivers: [
               SliverAppBar(
                 forceMaterialTransparency: true,
-                expandedHeight: 150,
+                expandedHeight: 200,
                 floating: true,
                 snap: true,
                 leading: Padding(
