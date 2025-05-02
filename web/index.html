@@ -19,6 +19,7 @@
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A new Flutter project.">
+  <meta name="google-signin-client_id" content="922825205086-jl5866tgtuuv95a8ti72fu9p1m0qck6k.apps.googleusercontent.com">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -34,5 +35,26 @@
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>
+  <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAHM9lEE3YomSZvXbRcXdKhlGW-_HpDzeY",
+      authDomain: "redine-dc9f2.firebaseapp.com",
+      projectId: "redine-dc9f2",
+      storageBucket: "redine-dc9f2.firebasestorage.app",
+      messagingSenderId: "922825205086",
+      appId: "1:922825205086:web:8956fd8db0609764589bcf"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+  </script>
 </body>
 </html>

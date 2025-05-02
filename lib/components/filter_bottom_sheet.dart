@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:redine_frontend/widgets/custom_button.dart';
 import 'search_bar.dart';
 import 'chip_list.dart';
 
@@ -183,36 +184,20 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             // Apply button
             Padding(
               padding: EdgeInsets.all(20),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    widget.onApply(
-                      avoidances: _selectedAvoidances,
-                      categories: _selectedCategories,
-                      nationalities: _selectedNationalities,
-                    );
-                    widget.fetchMealIngredients();
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF54AF75),
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  child: Text(
-                    'Apply',
-                    style: GoogleFonts.livvic(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+              child: CustomButton(
+                label: 'Apply',
+                onPressed: () {
+                  widget.onApply(
+                    avoidances: _selectedAvoidances,
+                    categories: _selectedCategories,
+                    nationalities: _selectedNationalities,
+                  );
+                  widget.fetchMealIngredients();
+                  Navigator.pop(context);
+                },
               ),
             ),
+
             const SizedBox(height: 16),
           ],
         ),
@@ -259,7 +244,7 @@ class FilterSectionWidget extends StatelessWidget {
             ),
             if (title == 'Avoidance')
               Text(
-                '   *Recipe with these will be excluded.' ,
+                '   *Recipe with these will be excluded.',
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 8,
