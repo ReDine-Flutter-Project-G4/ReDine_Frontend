@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '922825205086',
     projectId: 'redine-dc9f2',
     storageBucket: 'redine-dc9f2.firebasestorage.app',
+    iosClientId: '922825205086-gjkv6uq5u4at1ve23s5jid616in8u6uq.apps.googleusercontent.com',
     iosBundleId: 'com.example.redineFrontend',
   );
 
@@ -72,6 +73,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '922825205086',
     projectId: 'redine-dc9f2',
     storageBucket: 'redine-dc9f2.firebasestorage.app',
+    iosClientId: '922825205086-gjkv6uq5u4at1ve23s5jid616in8u6uq.apps.googleusercontent.com',
     iosBundleId: 'com.example.redineFrontend',
   );
 
@@ -83,4 +85,5 @@ class DefaultFirebaseOptions {
     authDomain: 'redine-dc9f2.firebaseapp.com',
     storageBucket: 'redine-dc9f2.firebasestorage.app',
   );
+
 }
