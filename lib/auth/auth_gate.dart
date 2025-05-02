@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../pages/login_page.dart';
+import 'package:redine_frontend/pages/auth_page.dart';
 import '../pages/home_page.dart';
 
 class AuthGate extends StatelessWidget {
@@ -16,7 +16,7 @@ class AuthGate extends StatelessWidget {
         } else if (snapshot.hasData) {
           return const HomeTabPage(); // authenticated
         } else {
-          return const LoginPage(); // not logged in
+          return const AuthPage(); // not logged in
         }
       },
     );
