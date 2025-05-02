@@ -56,7 +56,7 @@ class _HomeTabPageState extends State<HomeTabPage>
         children: [
           _buildHomeWithSliverAppBar(),
           SearchTabPage(tabController: _tabController),
-          const HelpTabPage(),
+          HelpTabPage(),
         ],
       ),
       bottomNavigationBar: CustomTabBar(tabController: _tabController),
