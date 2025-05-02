@@ -23,10 +23,15 @@ class AuthService {
     await _auth.signInWithEmailAndPassword(email: email, password: password);
   }
 
-  Future<void> register(String email, String password) async {
-    await _auth.createUserWithEmailAndPassword(
+  Future<void> register(String email, String password, String username) async {
+    final userCredential = await _auth.createUserWithEmailAndPassword(
       email: email,
       password: password,
+    );
+    await userCredential.user?.updateDisplayName(username);
+
+    await userCredential.user?.updatePhotoURL(
+      "https://www.thaimediafund.or.th/wp-content/uploads/2024/04/blank-profile-picture-973460_1280.png",
     );
   }
 

@@ -14,6 +14,7 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -60,6 +61,7 @@ class _AuthPageState extends State<AuthPage> {
         await _authService.register(
           _emailController.text,
           _passwordController.text,
+          _usernameController.text
         );
       }
 
@@ -170,6 +172,13 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                     ),
                     const SizedBox(height: 20),
+                    if (!_isLogin) ...[
+                      TextField(
+                        controller: _usernameController,
+                        decoration: _inputDecoration('Username'),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
                     TextField(
                       controller: _emailController,
                       decoration: _inputDecoration('Email'),
