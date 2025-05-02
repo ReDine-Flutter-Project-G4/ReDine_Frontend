@@ -11,7 +11,7 @@ class HelpTabPage extends StatefulWidget {
 class _HelpTabPageState extends State<HelpTabPage> {
   final List<AccordionItem> _items = [
     AccordionItem(
-      header: 'How to use ReDine',
+      header: 'How to use ReDine?',
       body: '''New to ReDine? Don’t worry — getting started is easy! 
 Our app is designed to help you discover delicious recipes based on what you already have in your kitchen. Just follow these simple steps:
 1. Add the ingredients you have.
@@ -20,7 +20,7 @@ Our app is designed to help you discover delicious recipes based on what you alr
 4. Browse the suggested menus, pick one you like, and follow the step-by-step instructions to cook.''',
     ),
     AccordionItem(
-      header: 'How are recipes ranked',
+      header: 'How are recipes ranked?',
       body:
           "Recipes are ranked by how closely they match what you already have. The more ingredients from your fridge a recipe uses and the fewer it’s missing the higher it appears. We also take your dietary preferences into account, so you see the most relevant and useful options first.",
     ),
