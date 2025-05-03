@@ -137,20 +137,23 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      _buildSectionTitle('Tutorial Video'),
-                      TextButton.icon(
-                        onPressed: _launchYoutube,
-                        icon: Iconify(Logos.youtube_icon, size: 10),
-                        label: const Text(
-                          'YouTube',
-                          style: TextStyle(color: Colors.black, fontSize: 10),
+                      if (meal['strYoutube'] != null &&
+                          meal['strYoutube'].isNotEmpty) ...[
+                        _buildSectionTitle('Tutorial Video'),
+                        TextButton.icon(
+                          onPressed: _launchYoutube,
+                          icon: Iconify(Logos.youtube_icon, size: 16),
+                          label: const Text(
+                            'Watch on YouTube',
+                            style: TextStyle(fontSize: 12),
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 250,
-                        width: double.infinity,
-                        child: YoutubePlayer(controller: _youtubeController),
-                      ),
+                        SizedBox(
+                          height: 250,
+                          width: double.infinity,
+                          child: YoutubePlayer(controller: _youtubeController),
+                        ),
+                      ],
                       const SizedBox(height: 20),
                     ],
                   ),
