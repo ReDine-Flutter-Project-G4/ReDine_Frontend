@@ -27,10 +27,14 @@ class CacheService {
     }
   }
 
-  static Future<void> updateAvoids(List<String> avoids) async {
+  static Future<void> updatePreferences(
+    List<String> avoids,
+    List<String> allergens,
+  ) async {
     final userData = await loadUserPref();
     if (userData != null) {
       userData['avoids'] = avoids;
+      userData['allergens'] = allergens;
       await saveUserPref(userData);
     }
   }

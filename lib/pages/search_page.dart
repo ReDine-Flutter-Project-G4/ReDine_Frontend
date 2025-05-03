@@ -11,19 +11,24 @@ import '../components/chip_list.dart';
 import '../components/filter_bottom_sheet.dart';
 import '../widgets/meal_card.dart' as custom_card;
 
-Future<List<String>> _loadCachedAvoids() async {
+Future<Map<String, List<String>>> loadCachedPreferences() async {
   final userData = await CacheService.loadUserPref();
-  if (userData != null && userData['avoids'] is List) {
-    return List<String>.from(userData['avoids']);
-  }
-  return [];
+  return {
+    'avoids': List<String>.from(userData?['avoids'] ?? []),
+    'allergens': List<String>.from(userData?['allergens'] ?? []),
+  };
 }
 
-Future<void> _saveAvoidsToDB(List<String> avoids) async {
+Future<void> _savePreferences(
+  List<String> avoids,
+  List<String> allergens,
+) async {
   final uid = FirebaseAuth.instance.currentUser?.uid;
   if (uid != null) {
-    await FirestoreService.updateAvoids(uid, avoids);
-    await CacheService.updateAvoids(avoids);
+    await Future.wait([
+      FirestoreService.updatePreferences(uid, avoids, allergens),
+      CacheService.updatePreferences(avoids, allergens),
+    ]);
   }
 }
 
@@ -59,9 +64,10 @@ class _SearchTabPageState extends State<SearchTabPage> {
   void initState() {
     super.initState();
     _searchController = SearchController();
-    _loadCachedAvoids().then((data) {
+    loadCachedPreferences().then((data) {
       setState(() {
-        _selectedAvoids.addAll(data);
+        _selectedAvoids.addAll(data['avoids'] ?? []);
+        _selectedAllergens.addAll(data['allergens'] ?? []);
       });
     });
     _fetchIngredients();
@@ -351,7 +357,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
                                     ..clear()
                                     ..addAll(nationalities);
                                 });
-                                await _saveAvoidsToDB(avoids);
+                                await _savePreferences(avoids, allergens);
                               },
                               fetchMealIngredients: _fetchMealIngredients,
                               fetchAllergens: _allAllergens,

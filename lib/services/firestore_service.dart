@@ -12,7 +12,7 @@ class FirestoreService {
       'email': user.email,
       'username': username,
       'avoids': [],
-      'favorites': [],
+      'allergens': [],
       'createdAt': FieldValue.serverTimestamp(),
     });
   }
@@ -22,12 +22,14 @@ class FirestoreService {
     return doc.data();
   }
 
-  static Future<void> updateAvoids(
+  static Future<void> updatePreferences(
     String uid,
     List<String> avoids,
+    List<String> allergens,
   ) async {
     await _firestore.collection('users').doc(uid).update({
       'avoids': avoids,
+      'allergens': allergens,
     });
   }
 }
