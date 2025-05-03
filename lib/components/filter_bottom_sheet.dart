@@ -125,7 +125,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     children: [
                       FilterSectionWidget(
                         title: 'Allergen',
-                        hintText: 'e.g. Milk, Peanuts, Shellfish',
+                        hintText: 'e.g., Dairy, Peanuts, Shellfish',
                         controller: _allergenController,
                         selectedChips: _selectedAllergens,
                         allSuggestions: widget.fetchAllergens,
@@ -145,7 +145,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       const SizedBox(height: 15),
                       FilterSectionWidget(
                         title: 'Avoid',
-                        hintText: 'e.g. Garlic, Beef, Mushrooms',
+                        hintText: 'e.g., Garlic, Beef, Mushrooms',
                         controller: _avoidController,
                         selectedChips: _selectedAvoids,
                         allSuggestions: widget.fetchAvoids,
