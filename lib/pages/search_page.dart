@@ -1,22 +1,37 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:redine_frontend/services/cache_service.dart';
 import '../pages/detail_page.dart';
 import '../components/search_bar.dart';
 import '../components/chip_list.dart';
 import '../components/filter_bottom_sheet.dart';
 import '../widgets/meal_card.dart' as custom_card;
-import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> _saveAvoidancesToCache(List<String> avoidances) async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setStringList('selectedAvoidances', avoidances);
+Future<List<String>> _loadCachedAvoidances() async {
+  final userData = await UserPrefService.loadUserPref();
+  if (userData != null && userData['avoidances'] is List) {
+    return List<String>.from(userData['avoidances']);
+  }
+  return [];
 }
 
-Future<List<String>> _loadAvoidancesFromCache() async {
-  final prefs = await SharedPreferences.getInstance();
-  return prefs.getStringList('selectedAvoidances') ?? [];
+Future<void> _saveAvoidancesToDB(List<String> avoidances) async {
+  final uid = FirebaseAuth.instance.currentUser?.uid;
+  if (uid != null) {
+    final userRef = FirebaseFirestore.instance.collection('users').doc(uid);
+     await userRef.update({
+      'avoidances': avoidances,
+    });
+    final userData = await UserPrefService.loadUserPref();
+    if (userData != null) {
+      userData['avoidances'] = avoidances;
+      await UserPrefService.saveUserPref(userData);
+    }
+  }
 }
 
 class SearchTabPage extends StatefulWidget {
@@ -49,7 +64,8 @@ class _SearchTabPageState extends State<SearchTabPage> {
   void initState() {
     super.initState();
     _searchController = SearchController();
-    _loadAvoidancesFromCache().then((data) {
+    _loadCachedAvoidances().then((data) {
+
       setState(() {
         _selectedAvoidances.addAll(data);
       });
@@ -336,7 +352,8 @@ class _SearchTabPageState extends State<SearchTabPage> {
                                     ..clear()
                                     ..addAll(nationalities);
                                 });
-                                await _saveAvoidancesToCache(avoidances);
+                                // await _saveAvoidancesToCache(avoidances);
+                                await _saveAvoidancesToDB(avoidances);
                               },
                               fetchMealIngredients: _fetchMealIngredients,
                               fetchAvoidances: _allAvoidances,

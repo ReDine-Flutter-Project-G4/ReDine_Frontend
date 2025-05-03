@@ -47,6 +47,15 @@ class _AccordionState extends State<Accordion> {
                       color: Colors.black,
                     ),
                   ),
+                  onExpansionChanged: (isExpanded) {
+                    setState(() {
+                      _expandedStates[index] = isExpanded;
+                    });
+                  },
+                  tilePadding: EdgeInsets.zero,
+                  shape: Border.all(color: Colors.transparent),
+                  collapsedIconColor: Colors.black,
+                  expandedAlignment: Alignment.centerLeft,
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -59,15 +68,6 @@ class _AccordionState extends State<Accordion> {
                       ),
                     ),
                   ],
-                  onExpansionChanged: (isExpanded) {
-                    setState(() {
-                      _expandedStates[index] = isExpanded;
-                    });
-                  },
-                  tilePadding: EdgeInsets.zero,
-                  shape: Border.all(color: Colors.transparent),
-                  collapsedIconColor: Colors.black,
-                  expandedAlignment: Alignment.centerLeft,
                 ),
               ),
               const Divider(indent: 0.0, endIndent: 0.0, color: Colors.black26),
