@@ -5,18 +5,21 @@ import 'search_bar.dart';
 import 'chip_list.dart';
 
 class FilterBottomSheet extends StatefulWidget {
-  final List<String> selectedAvoidances;
+  final List<String> selectedAllergens;
+  final List<String> selectedAvoids;
   final List<String> selectedCategories;
   final List<String> selectedNationalities;
 
-  final List<String> fetchAvoidances;
+  final List<String> fetchAllergens;
+  final List<String> fetchAvoids;
   final List<String> fetchCategories;
   final List<String> fetchNationalities;
 
   final Future<void> Function() fetchMealIngredients;
 
   final Function({
-    required List<String> avoidances,
+    required List<String> allergens,
+    required List<String> avoids,
     required List<String> categories,
     required List<String> nationalities,
   })
@@ -24,12 +27,14 @@ class FilterBottomSheet extends StatefulWidget {
 
   const FilterBottomSheet({
     super.key,
-    required this.selectedAvoidances,
+    required this.selectedAllergens,
+    required this.selectedAvoids,
     required this.selectedCategories,
     required this.selectedNationalities,
     required this.onApply,
     required this.fetchMealIngredients,
-    required this.fetchAvoidances,
+    required this.fetchAllergens,
+    required this.fetchAvoids,
     required this.fetchCategories,
     required this.fetchNationalities,
   });
@@ -39,18 +44,21 @@ class FilterBottomSheet extends StatefulWidget {
 }
 
 class _FilterBottomSheetState extends State<FilterBottomSheet> {
-  final SearchController _avoidanceController = SearchController();
+  final SearchController _allergenController = SearchController();
+  final SearchController _avoidController = SearchController();
   final SearchController _categoryController = SearchController();
   final SearchController _nationalityController = SearchController();
 
-  final List<String> _selectedAvoidances = [];
+  final List<String> _selectedAllergens = [];
+  final List<String> _selectedAvoids = [];
   final List<String> _selectedCategories = [];
   final List<String> _selectedNationalities = [];
 
   @override
   void initState() {
     super.initState();
-    _selectedAvoidances.addAll(widget.selectedAvoidances);
+    _selectedAllergens.addAll(widget.selectedAllergens);
+    _selectedAvoids.addAll(widget.selectedAvoids);
     _selectedCategories.addAll(widget.selectedCategories);
     _selectedNationalities.addAll(widget.selectedNationalities);
   }
@@ -82,7 +90,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     TextButton(
                       onPressed: () {
                         setState(() {
-                          _selectedAvoidances.clear();
+                          _selectedAllergens.clear();
+                          _selectedAvoids.clear();
                           _selectedCategories.clear();
                           _selectedNationalities.clear();
                         });
@@ -109,27 +118,49 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             // const Divider(),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.all(20),
+                padding: EdgeInsets.all(16),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       FilterSectionWidget(
-                        title: 'Avoidance',
-                        hintText: 'e.g., Nuts, Milk, Fish',
-                        controller: _avoidanceController,
-                        selectedChips: _selectedAvoidances,
-                        allSuggestions: widget.fetchAvoidances,
+                        title: 'Allergen',
+                        hintText: 'e.g. Milk, Peanuts, Shellfish',
+                        helperText: '  *Recipes with these allergens will be excluded.',
+                        controller: _allergenController,
+                        selectedChips: _selectedAllergens,
+                        allSuggestions: widget.fetchAllergens,
                         onChipAdded: (chip) {
                           setState(() {
-                            if (!_selectedAvoidances.contains(chip)) {
-                              _selectedAvoidances.add(chip);
+                            if (!_selectedAllergens.contains(chip)) {
+                              _selectedAllergens.add(chip);
                             }
                           });
                         },
                         onChipDeleted: (chip) {
                           setState(() {
-                            _selectedAvoidances.remove(chip);
+                            _selectedAllergens.remove(chip);
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      FilterSectionWidget(
+                        title: 'Avoid',
+                        hintText: 'e.g. Garlic, Beef, Mushrooms',
+                        helperText: '  *Recipe with these ingredients will be excluded',
+                        controller: _avoidController,
+                        selectedChips: _selectedAvoids,
+                        allSuggestions: widget.fetchAvoids,
+                        onChipAdded: (chip) {
+                          setState(() {
+                            if (!_selectedAvoids.contains(chip)) {
+                              _selectedAvoids.add(chip);
+                            }
+                          });
+                        },
+                        onChipDeleted: (chip) {
+                          setState(() {
+                            _selectedAvoids.remove(chip);
                           });
                         },
                       ),
@@ -188,7 +219,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 label: 'Apply',
                 onPressed: () {
                   widget.onApply(
-                    avoidances: _selectedAvoidances,
+                    allergens: _selectedAllergens,
+                    avoids: _selectedAvoids,
                     categories: _selectedCategories,
                     nationalities: _selectedNationalities,
                   );
@@ -210,6 +242,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 class FilterSectionWidget extends StatelessWidget {
   final String title;
   final String hintText;
+  final String? helperText;
   final SearchController controller;
   final List<String> selectedChips;
   final List<String> allSuggestions;
@@ -220,6 +253,7 @@ class FilterSectionWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.hintText,
+    this.helperText,
     required this.controller,
     required this.selectedChips,
     required this.allSuggestions,
@@ -242,13 +276,12 @@ class FilterSectionWidget extends StatelessWidget {
                 fontSize: 14,
               ),
             ),
-            if (title == 'Avoidance')
-              Text(
-                '   *Recipe with these will be excluded.',
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 8,
-                  color: Color(0xFF8A8A8A),
+            if (helperText != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  helperText!,
+                  style: TextStyle(fontSize: 10, color: Color(0xFF8A8A8A)),
                 ),
               ),
           ],

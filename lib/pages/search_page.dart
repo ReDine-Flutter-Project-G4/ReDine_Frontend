@@ -11,19 +11,19 @@ import '../components/chip_list.dart';
 import '../components/filter_bottom_sheet.dart';
 import '../widgets/meal_card.dart' as custom_card;
 
-Future<List<String>> _loadCachedAvoidances() async {
+Future<List<String>> _loadCachedAvoids() async {
   final userData = await CacheService.loadUserPref();
-  if (userData != null && userData['avoidances'] is List) {
-    return List<String>.from(userData['avoidances']);
+  if (userData != null && userData['avoids'] is List) {
+    return List<String>.from(userData['avoids']);
   }
   return [];
 }
 
-Future<void> _saveAvoidancesToDB(List<String> avoidances) async {
+Future<void> _saveAvoidsToDB(List<String> avoids) async {
   final uid = FirebaseAuth.instance.currentUser?.uid;
   if (uid != null) {
-    await FirestoreService.updateAvoidances(uid, avoidances);
-    await CacheService.updateAvoidances(avoidances);
+    await FirestoreService.updateAvoids(uid, avoids);
+    await CacheService.updateAvoids(avoids);
   }
 }
 
@@ -39,7 +39,8 @@ class _SearchTabPageState extends State<SearchTabPage> {
   static const String baseUrl = 'http://localhost:3000/api';
   late final SearchController _searchController;
 
-  final List<String> _selectedAvoidances = [];
+  final List<String> _selectedAllergens = [];
+  final List<String> _selectedAvoids = [];
   final List<String> _selectedCategories = [];
   final List<String> _selectedNationalities = [];
   final List<String> _selectedChips = [];
@@ -51,16 +52,16 @@ class _SearchTabPageState extends State<SearchTabPage> {
   List<String> _allIngredients = [];
   List<String> _allCategories = [];
   List<String> _allNationalities = [];
-  List<String> _allAvoidances = [];
+  List<String> _allAvoids = [];
+  List<String> _allAllergens = [];
 
   @override
   void initState() {
     super.initState();
     _searchController = SearchController();
-    _loadCachedAvoidances().then((data) {
-
+    _loadCachedAvoids().then((data) {
       setState(() {
-        _selectedAvoidances.addAll(data);
+        _selectedAvoids.addAll(data);
       });
     });
     _fetchIngredients();
@@ -155,13 +156,13 @@ class _SearchTabPageState extends State<SearchTabPage> {
         final jsonResponse = json.decode(response.body);
         setState(() {
           _allIngredients = List<String>.from(jsonResponse['ingredients']);
-          _allAvoidances = List<String>.from(jsonResponse['ingredients']);
+          _allAvoids = List<String>.from(jsonResponse['ingredients']);
           _isLoading = false;
         });
       } else if (response.statusCode == 404) {
         setState(() {
           _allIngredients = [];
-          _allAvoidances = [];
+          _allAvoids = [];
           _errorMessage = 'No data found';
           _isLoading = false;
         });
@@ -180,13 +181,13 @@ class _SearchTabPageState extends State<SearchTabPage> {
     final ingredientsQuery = _selectedChips.join(',');
     final nationalityQuery = _selectedNationalities.join(',');
     final cateforyyQuery = _selectedCategories.join(',');
-    final avoidancesQuery = _selectedAvoidances.join(',');
+    final avoidsQuery = _selectedAvoids.join(',');
     setState(() {
       _isLoading = true;
       _errorMessage = '';
     });
     final url =
-        '$baseUrl/menu/ingredients?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&avoidances=$avoidancesQuery';
+        '$baseUrl/menu/ingredients?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&avoids=$avoidsQuery';
     try {
       final response = await http.get(
         Uri.parse(url),
@@ -326,18 +327,23 @@ class _SearchTabPageState extends State<SearchTabPage> {
                         backgroundColor: Colors.white,
                         builder:
                             (context) => FilterBottomSheet(
-                              selectedAvoidances: _selectedAvoidances,
+                              selectedAllergens: _selectedAllergens,
+                              selectedAvoids: _selectedAvoids,
                               selectedCategories: _selectedCategories,
                               selectedNationalities: _selectedNationalities,
                               onApply: ({
-                                required List<String> avoidances,
+                                required List<String> allergens,
+                                required List<String> avoids,
                                 required List<String> categories,
                                 required List<String> nationalities,
                               }) async {
                                 setState(() {
-                                  _selectedAvoidances
+                                  _selectedAllergens
                                     ..clear()
-                                    ..addAll(avoidances);
+                                    ..addAll(allergens);
+                                  _selectedAvoids
+                                    ..clear()
+                                    ..addAll(avoids);
                                   _selectedCategories
                                     ..clear()
                                     ..addAll(categories);
@@ -345,11 +351,11 @@ class _SearchTabPageState extends State<SearchTabPage> {
                                     ..clear()
                                     ..addAll(nationalities);
                                 });
-                                // await _saveAvoidancesToCache(avoidances);
-                                await _saveAvoidancesToDB(avoidances);
+                                await _saveAvoidsToDB(avoids);
                               },
                               fetchMealIngredients: _fetchMealIngredients,
-                              fetchAvoidances: _allAvoidances,
+                              fetchAllergens: _allAllergens,
+                              fetchAvoids: _allAvoids,
                               fetchCategories: _allCategories,
                               fetchNationalities: _allNationalities,
                             ),
@@ -361,7 +367,8 @@ class _SearchTabPageState extends State<SearchTabPage> {
                   ),
                 ),
                 // Green Circle
-                if (_selectedAvoidances.isNotEmpty ||
+                if (_selectedAllergens.isNotEmpty ||
+                    _selectedAvoids.isNotEmpty ||
                     _selectedCategories.isNotEmpty ||
                     _selectedNationalities.isNotEmpty)
                   Positioned(

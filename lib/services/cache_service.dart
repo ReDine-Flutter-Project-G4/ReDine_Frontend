@@ -27,10 +27,10 @@ class CacheService {
     }
   }
 
-  static Future<void> updateAvoidances(List<String> avoidances) async {
+  static Future<void> updateAvoids(List<String> avoids) async {
     final userData = await loadUserPref();
     if (userData != null) {
-      userData['avoidances'] = avoidances;
+      userData['avoids'] = avoids;
       await saveUserPref(userData);
     }
   }

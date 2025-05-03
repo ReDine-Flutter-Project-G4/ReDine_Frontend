@@ -11,7 +11,7 @@ class FirestoreService {
     await _firestore.collection('users').doc(user.uid).set({
       'email': user.email,
       'username': username,
-      'avoidances': [],
+      'avoids': [],
       'favorites': [],
       'createdAt': FieldValue.serverTimestamp(),
     });
@@ -22,12 +22,12 @@ class FirestoreService {
     return doc.data();
   }
 
-  static Future<void> updateAvoidances(
+  static Future<void> updateAvoids(
     String uid,
-    List<String> avoidances,
+    List<String> avoids,
   ) async {
     await _firestore.collection('users').doc(uid).update({
-      'avoidances': avoidances,
+      'avoids': avoids,
     });
   }
 }
