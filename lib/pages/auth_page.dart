@@ -61,7 +61,7 @@ class _AuthPageState extends State<AuthPage> {
         await _authService.register(
           _emailController.text,
           _passwordController.text,
-          _usernameController.text
+          _usernameController.text,
         );
       }
 
@@ -152,7 +152,7 @@ class _AuthPageState extends State<AuthPage> {
                   ],
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       _isLogin ? 'Welcome back' : 'Register',
@@ -205,6 +205,7 @@ class _AuthPageState extends State<AuthPage> {
                           onPressed: _submit,
                         ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           _isLogin
@@ -217,6 +218,7 @@ class _AuthPageState extends State<AuthPage> {
                         ),
                       ],
                     ),
+
                     Row(
                       children: const [
                         Expanded(child: Divider(thickness: 1)),

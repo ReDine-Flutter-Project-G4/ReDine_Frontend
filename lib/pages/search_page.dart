@@ -41,7 +41,7 @@ class SearchTabPage extends StatefulWidget {
 }
 
 class _SearchTabPageState extends State<SearchTabPage> {
-  static const String baseUrl = 'http://localhost:3000/api';
+  static const String baseUrl = 'http://192.168.1.198:3000/api';
   late final SearchController _searchController;
 
   final List<String> _selectedAllergens = [];
@@ -71,6 +71,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       });
     });
     _fetchIngredients();
+    _fetchAllergens();
     _fetchCategories();
     _fetchNationality();
   }
@@ -100,6 +101,39 @@ class _SearchTabPageState extends State<SearchTabPage> {
       } else if (response.statusCode == 404) {
         setState(() {
           _allCategories = [];
+          _errorMessage = 'No data found';
+        });
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Error fetching data: $e';
+      });
+    }
+  }
+
+  Future<void> _fetchAllergens() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = '';
+    });
+    final url = '$baseUrl/meta/allergens';
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        setState(() {
+          _allAllergens = List<String>.from(jsonResponse['allergen']);
+        });
+      } else if (response.statusCode == 404) {
+        setState(() {
+          _allAllergens = [];
           _errorMessage = 'No data found';
         });
       } else {
@@ -188,12 +222,13 @@ class _SearchTabPageState extends State<SearchTabPage> {
     final nationalityQuery = _selectedNationalities.join(',');
     final cateforyyQuery = _selectedCategories.join(',');
     final avoidsQuery = _selectedAvoids.join(',');
+    final allergensQuery = _selectedAllergens.join(',');
     setState(() {
       _isLoading = true;
       _errorMessage = '';
     });
     final url =
-        '$baseUrl/menu/ingredients?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&avoids=$avoidsQuery';
+        '$baseUrl/menu/ingredients?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&avoids=$avoidsQuery&allergens=$allergensQuery';
     try {
       final response = await http.get(
         Uri.parse(url),
