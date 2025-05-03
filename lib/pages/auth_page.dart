@@ -157,7 +157,7 @@ class _AuthPageState extends State<AuthPage> {
                     Text(
                       _isLogin ? 'Welcome back' : 'Register',
                       style: GoogleFonts.livvic(
-                        fontSize: 25,
+                        fontSize: 26,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -166,7 +166,7 @@ class _AuthPageState extends State<AuthPage> {
                           ? 'Login to your account'
                           : 'Create your new account',
                       style: GoogleFonts.livvic(
-                        fontSize: 16,
+                        fontSize: 18,
                         fontWeight: FontWeight.w700,
                         color: const Color(0xFF54AF75),
                       ),
@@ -240,11 +240,11 @@ class _AuthPageState extends State<AuthPage> {
                         icon: Iconify(Logos.google_icon, size: 20),
                         label: const Text(
                           'Sign in with Google',
-                          style: TextStyle(color: Colors.black, fontSize: 12),
+                          style: TextStyle(color: Colors.black, fontSize: 14),
                         ),
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(color: Colors.grey),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 18),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
                           ),

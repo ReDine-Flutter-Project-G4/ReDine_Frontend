@@ -107,7 +107,7 @@ class _DetailPageState extends State<DetailPage> {
                             Text(
                               meal['strMeal'] ?? '',
                               style: GoogleFonts.livvic(
-                                fontSize: 16,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                               textAlign: TextAlign.center,
@@ -133,7 +133,7 @@ class _DetailPageState extends State<DetailPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: Text(
                           meal['strInstructions'] ?? '',
-                          style: const TextStyle(fontSize: 10),
+                          style: const TextStyle(fontSize: 12),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -145,7 +145,7 @@ class _DetailPageState extends State<DetailPage> {
                           icon: Iconify(Logos.youtube_icon, size: 16),
                           label: const Text(
                             'Watch on YouTube',
-                            style: TextStyle(fontSize: 12),
+                            style: TextStyle(fontSize: 14),
                           ),
                         ),
                         SizedBox(
@@ -172,7 +172,7 @@ class _DetailPageState extends State<DetailPage> {
       child: Text(
         title,
         style: GoogleFonts.livvic(
-          fontSize: 14,
+          fontSize: 16,
           color: const Color(0xFF54AF75),
           fontWeight: FontWeight.bold,
         ),
@@ -210,14 +210,14 @@ class _DetailPageState extends State<DetailPage> {
                       flex: 2,
                       child: Text(
                         item['ingredient'] ?? '',
-                        style: const TextStyle(fontSize: 10),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     ),
                     Expanded(
                       flex: 1,
                       child: Text(
                         item['measure'] ?? '',
-                        style: const TextStyle(fontSize: 10),
+                        style: const TextStyle(fontSize: 12),
                         textAlign: TextAlign.right,
                       ),
                     ),

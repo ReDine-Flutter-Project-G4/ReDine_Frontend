@@ -62,7 +62,7 @@ class _AccordionState extends State<Accordion> {
                       child: Text(
                         item.body,
                         style: const TextStyle(
-                          fontSize: 14,
+                          fontSize: 12,
                           color: Colors.black54,
                         ),
                       ),

@@ -70,7 +70,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     return SizedBox(
       height: screenHeight * 0.75,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(15),
         child: Column(
           children: [
             // Top bar
@@ -80,7 +80,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 Text(
                   'Filter',
                   style: GoogleFonts.livvic(
-                    fontSize: 16,
+                    fontSize: 18,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -118,7 +118,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             // const Divider(),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(15),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,7 +221,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 
             // Apply button
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(15),
               child: CustomButton(
                 label: 'Apply',
                 onPressed: () {
@@ -278,7 +278,7 @@ class FilterSectionWidget extends StatelessWidget {
               title,
               style: GoogleFonts.livvic(
                 fontWeight: FontWeight.w700,
-                fontSize: 14,
+                fontSize: 16,
               ),
             ),
           ],

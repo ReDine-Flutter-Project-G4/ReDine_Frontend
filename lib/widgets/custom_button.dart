@@ -21,7 +21,7 @@ class CustomButton extends StatelessWidget {
             backgroundColor: WidgetStateProperty.all(const Color(0xFF54AF75)),
             foregroundColor: WidgetStateProperty.all(Colors.white),
             padding: WidgetStateProperty.all(
-              const EdgeInsets.symmetric(vertical: 20),
+              const EdgeInsets.symmetric(vertical: 18),
             ),
             animationDuration: const Duration(milliseconds: 200),
             shape: WidgetStateProperty.all(
@@ -33,7 +33,7 @@ class CustomButton extends StatelessWidget {
           child: Text(
             label,
             style: GoogleFonts.livvic(
-              fontSize: 12,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
             ),
           ),

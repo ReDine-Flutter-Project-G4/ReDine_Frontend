@@ -65,7 +65,7 @@ class MealCard extends StatelessWidget {
                         Text(
                           strMeal,
                           style: GoogleFonts.livvic(
-                            fontSize: 10,
+                            fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),
                           maxLines: 1,
@@ -87,12 +87,12 @@ class MealCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             maxLines: maxLines,
                             text: TextSpan(
-                              style: const TextStyle(
-                                fontSize: 10,
+                              style: GoogleFonts.kanit(
+                                fontSize: 12,
                                 color: Color(0xFF020202),
                               ),
                               children: [
-                                const TextSpan(text: 'Ingredient: '),
+                                TextSpan(text: 'Ingredient: ', style: GoogleFonts.livvic()),
                                 TextSpan(text: strIngredients.join(', ')),
                               ],
                             ),

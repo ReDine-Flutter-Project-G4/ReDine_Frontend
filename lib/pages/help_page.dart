@@ -46,14 +46,14 @@ Our app is designed to help you discover delicious recipes based on what you alr
           const Center(
             child: Text(
               'Help Center',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(height: 20),
           const Text(
             'Frequently Asked Questions (FAQs)',
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.w600,
               color: Color(0xFF54AF75),
             ),
@@ -63,16 +63,22 @@ Our app is designed to help you discover delicious recipes based on what you alr
           const Text(
             "Contact Support Section",
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.w600,
               color: Color(0xFF54AF75),
             ),
           ),
           const SizedBox(height: 10),
-          const Text("King Mongkut’s University of Technology Thonburi 126 Pracha Uthit Rd, Bang Mot, Thung Khru, Bangkok 10140"),
+          const Text(
+            "King Mongkut’s University of Technology Thonburi\n126 Pracha Uthit Rd, Bang Mot, Thung Khru, Bangkok 10140",
+            style: TextStyle(fontSize: 12),
+          ),
           const SizedBox(height: 20),
-          const Text("Phone: +66 9999 9999"),
-          const Text("Email: redine.co@gmail.com"),
+          const Text("Phone: +66 9999 9999", style: TextStyle(fontSize: 12)),
+          const Text(
+            "Email: redine.co@gmail.com",
+            style: TextStyle(fontSize: 12),
+          ),
           const SizedBox(height: 50),
         ],
       ),

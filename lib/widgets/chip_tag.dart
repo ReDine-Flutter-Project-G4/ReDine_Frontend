@@ -19,7 +19,7 @@ class ChipTag extends StatelessWidget {
       child: Text(
         label,
         style: const TextStyle(
-          fontSize: 8,
+          fontSize: 10,
           color: Colors.white,
           fontWeight: FontWeight.w500,
         ),
