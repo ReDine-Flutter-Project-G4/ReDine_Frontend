@@ -126,7 +126,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       FilterSectionWidget(
                         title: 'Allergen',
                         hintText: 'e.g. Milk, Peanuts, Shellfish',
-                        helperText: '  *Recipes with these allergens will be excluded.',
                         controller: _allergenController,
                         selectedChips: _selectedAllergens,
                         allSuggestions: widget.fetchAllergens,
@@ -143,11 +142,10 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           });
                         },
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 15),
                       FilterSectionWidget(
                         title: 'Avoid',
                         hintText: 'e.g. Garlic, Beef, Mushrooms',
-                        helperText: '  *Recipe with these ingredients will be excluded',
                         controller: _avoidController,
                         selectedChips: _selectedAvoids,
                         allSuggestions: widget.fetchAvoids,
@@ -164,7 +162,16 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           });
                         },
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 15),
+                      Text(
+                        '*Recipes with these allergens or avoided ingredients will be excluded.',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: Color(0xFF8A8A8A),
+                        ),
+                      ),
+                      Divider(),
+                      const SizedBox(height: 15),
                       FilterSectionWidget(
                         title: 'Category',
                         hintText: 'e.g., Vegan, Pasta, Seafood',
@@ -184,7 +191,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           });
                         },
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 15),
                       FilterSectionWidget(
                         title: 'Nationality',
                         hintText: 'e.g., Italian, Chinese, Indian',
@@ -210,7 +217,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 15),
 
             // Apply button
             Padding(
@@ -230,7 +237,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 15),
           ],
         ),
       ),
@@ -242,7 +249,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 class FilterSectionWidget extends StatelessWidget {
   final String title;
   final String hintText;
-  final String? helperText;
   final SearchController controller;
   final List<String> selectedChips;
   final List<String> allSuggestions;
@@ -253,7 +259,6 @@ class FilterSectionWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.hintText,
-    this.helperText,
     required this.controller,
     required this.selectedChips,
     required this.allSuggestions,
@@ -276,19 +281,9 @@ class FilterSectionWidget extends StatelessWidget {
                 fontSize: 14,
               ),
             ),
-            if (helperText != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Text(
-                  helperText!,
-                  style: TextStyle(fontSize: 10, color: Color(0xFF8A8A8A)),
-                ),
-              ),
           ],
         ),
-
         const SizedBox(height: 8),
-
         // Reuse SearchBarWidget
         SizedBox(
           width: double.infinity,
@@ -302,7 +297,6 @@ class FilterSectionWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-
         // Reuse ChipListWidget
         ChipListWidget(chips: selectedChips, onChipDeleted: onChipDeleted),
       ],
