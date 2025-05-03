@@ -42,7 +42,7 @@ Our app is designed to help you discover delicious recipes based on what you alr
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: ListView(
         children: [
-          const SizedBox(height: 50),
+          const SizedBox(height: 20),
           const Center(
             child: Text(
               'Help Center',
@@ -73,6 +73,7 @@ Our app is designed to help you discover delicious recipes based on what you alr
           const SizedBox(height: 20),
           const Text("Phone: +66 9999 9999"),
           const Text("Email: redine.co@gmail.com"),
+          const SizedBox(height: 50),
         ],
       ),
     );
