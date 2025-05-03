@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserPrefService {
+class CacheService {
   static const _key = 'user_pref';
 
   static Future<void> saveUserPref(Map<String, dynamic> userData) async {
@@ -24,6 +24,14 @@ class UserPrefService {
     } catch (e) {
       print('Error loading user pref: $e');
       return null;
+    }
+  }
+
+  static Future<void> updateAvoidances(List<String> avoidances) async {
+    final userData = await loadUserPref();
+    if (userData != null) {
+      userData['avoidances'] = avoidances;
+      await saveUserPref(userData);
     }
   }
 

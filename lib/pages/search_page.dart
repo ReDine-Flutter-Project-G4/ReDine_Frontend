@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:redine_frontend/services/cache_service.dart';
+import 'package:redine_frontend/services/firestore_service.dart';
 import '../pages/detail_page.dart';
 import '../components/search_bar.dart';
 import '../components/chip_list.dart';
@@ -12,7 +12,7 @@ import '../components/filter_bottom_sheet.dart';
 import '../widgets/meal_card.dart' as custom_card;
 
 Future<List<String>> _loadCachedAvoidances() async {
-  final userData = await UserPrefService.loadUserPref();
+  final userData = await CacheService.loadUserPref();
   if (userData != null && userData['avoidances'] is List) {
     return List<String>.from(userData['avoidances']);
   }
@@ -22,15 +22,8 @@ Future<List<String>> _loadCachedAvoidances() async {
 Future<void> _saveAvoidancesToDB(List<String> avoidances) async {
   final uid = FirebaseAuth.instance.currentUser?.uid;
   if (uid != null) {
-    final userRef = FirebaseFirestore.instance.collection('users').doc(uid);
-     await userRef.update({
-      'avoidances': avoidances,
-    });
-    final userData = await UserPrefService.loadUserPref();
-    if (userData != null) {
-      userData['avoidances'] = avoidances;
-      await UserPrefService.saveUserPref(userData);
-    }
+    await FirestoreService.updateAvoidances(uid, avoidances);
+    await CacheService.updateAvoidances(avoidances);
   }
 }
 
