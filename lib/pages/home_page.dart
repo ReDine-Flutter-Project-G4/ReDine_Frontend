@@ -25,6 +25,17 @@ class _HomeTabPageState extends State<HomeTabPage> {
     loadMockData();
   }
 
+  List<String> _extractIngredients(Map<String, dynamic> meal) {
+    List<String> ingredients = [];
+    for (int i = 1; i <= 20; i++) {
+      final ingredient = meal['strIngredient$i'];
+      if (ingredient != null && ingredient.toString().isNotEmpty) {
+        ingredients.add(ingredient);
+      }
+    }
+    return ingredients;
+  }
+
   Future<void> loadMockData() async {
     try {
       String jsonString = await rootBundle.loadString('assets/mock_data.json');
@@ -57,7 +68,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
                 strMealThumb: meal['strMealThumb'],
                 strArea: meal['strArea'],
                 strCategory: meal['strCategory'],
-                strIngredients: _getIngredients(meal),
+                strIngredients: _extractIngredients(meal),
               );
             }, childCount: mockData.length),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -188,15 +199,5 @@ class _HomeTabPageState extends State<HomeTabPage> {
         ),
       ),
     );
-  }
-
-  List<String> _getIngredients(Map<String, dynamic> meal) {
-    List<String> ingredients = [];
-    for (int i = 1; i <= 20; i++) {
-      if (meal['strIngredient$i'] != '' && meal['strIngredient$i'] != null) {
-        ingredients.add('${meal['strIngredient$i']}');
-      }
-    }
-    return ingredients;
   }
 }
