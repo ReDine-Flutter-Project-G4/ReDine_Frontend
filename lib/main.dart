@@ -20,13 +20,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'ReDine',
       theme: ThemeData(
+        textTheme: GoogleFonts.kanitTextTheme(),
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF54AF75)),
-        textTheme: GoogleFonts.kanitTextTheme(),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-            foregroundColor: const Color(0xFF54AF75),
-            overlayColor: Colors.black12,
+            foregroundColor: const Color(0xFF54AF75), // Text and Icon color
+            overlayColor: Colors.black, // Hover color
             textStyle: GoogleFonts.kanit(),
           ),
         ),
