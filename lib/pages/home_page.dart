@@ -248,7 +248,12 @@ class _HomeTabPageState extends State<HomeTabPage> {
                       builder:
                           (context) => AlertDialog(
                             backgroundColor: Colors.white,
-                            title: const Text('Confirm Logout'),
+                            title: Text(
+                              'Confirm Logout',
+                              style: GoogleFonts.livvic(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                             content: const Text(
                               'Are you sure you want to log out?',
                             ),

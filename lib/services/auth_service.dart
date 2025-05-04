@@ -1,22 +1,44 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:redine_frontend/services/cache_service.dart';
 import 'package:redine_frontend/services/firestore_service.dart';
+import 'package:redine_frontend/state/global_flags.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  getProfileImage({double size = 100}) {
-    final photoUrl = _auth.currentUser?.photoURL;
-    return Image.network(
-      photoUrl ??
-          "https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png",
-      height: size,
-      width: size,
-      fit: BoxFit.cover,
-    );
-  }
+Image getProfileImage({double size = 100}) {
+  final photoUrl = FirebaseAuth.instance.currentUser?.photoURL;
+
+  return Image.network(
+    photoUrl ??
+        "https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png",
+    height: size,
+    width: size,
+    fit: BoxFit.cover,
+    errorBuilder: (context, error, stackTrace) {
+      print(error);
+      return Image.network(
+        "https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png",
+        height: size,
+        width: size,
+        fit: BoxFit.cover,
+      );
+    },
+    loadingBuilder: (context, child, loadingProgress) {
+      if (loadingProgress == null) return child;
+      return SizedBox(
+        height: size,
+        width: size,
+        child: const Center(
+          child: CircularProgressIndicator(strokeWidth: 2),
+        ),
+      );
+    },
+  );
+}
 
   getUserName() {
     return _auth.currentUser?.displayName ?? "Guest";
@@ -45,6 +67,7 @@ class AuthService {
       final isFirstTime = userCredential.additionalUserInfo?.isNewUser ?? false;
 
       if (isFirstTime) {
+        GlobalFlags.isNewUser = true;
         await FirestoreService.createUser(
           user: user,
           username: user.displayName ?? 'Guest',
@@ -81,7 +104,22 @@ class AuthService {
         username: username,
       ); // Save user data to Firestore
       await FirestoreService.getUserPref(user.uid);
+      await sendVerificationEmail();
+      GlobalFlags.isNewUser = true;
     }
+  }
+
+    Future<void> sendVerificationEmail() async {
+    final user = _auth.currentUser;
+    if (user != null && !user.emailVerified) {
+      await user.sendEmailVerification();
+    }
+  }
+
+  Future<bool> isEmailVerified() async {
+    final user = _auth.currentUser;
+    await user?.reload(); // Refresh user data
+    return user?.emailVerified ?? false;
   }
 
   Future<void> signOut() async {

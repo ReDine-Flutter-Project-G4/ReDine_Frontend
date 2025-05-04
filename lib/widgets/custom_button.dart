@@ -3,42 +3,75 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CustomButton extends StatelessWidget {
   final String label;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
+  final IconData? icon;
+  final bool isLoading;
+  final Color backgroundColor;
+  final Color textColor;
+  final EdgeInsetsGeometry padding;
+  final double fontSize;
+  final bool fullWidth;
 
   const CustomButton({
     super.key,
     required this.label,
-    required this.onPressed,
+    this.onPressed,
+    this.icon,
+    this.isLoading = false,
+    this.backgroundColor = const Color(0xFF54AF75),
+    this.textColor = Colors.white,
+    this.padding = const EdgeInsets.symmetric(vertical: 18),
+    this.fontSize = 14,
+    this.fullWidth = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: double.infinity,
-        child: TextButton(
-          onPressed: onPressed,
-          style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.all(const Color(0xFF54AF75)),
-            foregroundColor: WidgetStateProperty.all(Colors.white),
-            padding: WidgetStateProperty.all(
-              const EdgeInsets.symmetric(vertical: 18),
+    final content = isLoading
+        ? const SizedBox(
+            height: 18,
+            width: 18,
+            child: CircularProgressIndicator(
+              strokeWidth: 2.5,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
             ),
-            animationDuration: const Duration(milliseconds: 200),
-            shape: WidgetStateProperty.all(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
+          )
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (icon != null) ...[
+                Icon(icon, size: 18, color: textColor),
+                const SizedBox(width: 8),
+              ],
+              Text(
+                label,
+                style: GoogleFonts.livvic(
+                  fontSize: fontSize,
+                  fontWeight: FontWeight.w700,
+                  color: textColor,
+                ),
               ),
-            ),
-          ),
-          child: Text(
-            label,
-            style: GoogleFonts.livvic(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
+            ],
+          );
+
+    return SizedBox(
+      width: fullWidth ? double.infinity : null,
+      child: TextButton(
+        onPressed: isLoading ? null : onPressed,
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.all(backgroundColor),
+          foregroundColor: WidgetStateProperty.all(textColor),
+          padding: WidgetStateProperty.all(padding),
+          animationDuration: const Duration(milliseconds: 200),
+          shape: WidgetStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
             ),
           ),
         ),
-      );
-    
+        child: content,
+      ),
+    );
   }
 }
