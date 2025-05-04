@@ -72,13 +72,6 @@ flutter_launcher_icons:
     image_path: "path/to/image.png"
     background_color: "#hexcode"
     theme_color: "#hexcode"
-  windows:
-    generate: true
-    image_path: "path/to/image.png"
-    icon_size: 48 # min:48, max:256, default: 48
-  macos:
-    generate: true
-    image_path: "path/to/image.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -91,6 +84,8 @@ flutter:
   assets:
     - assets/mock_data.json
     - assets/redine.svg
+    - assets/image/Intersect.png
+    - assets/image/vegetable.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
