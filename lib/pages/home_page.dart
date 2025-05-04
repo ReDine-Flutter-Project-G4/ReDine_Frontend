@@ -47,6 +47,59 @@ class _HomeTabPageState extends State<HomeTabPage> {
                 bottomLeft: Radius.circular(25), // Round bottom left corner
                 bottomRight: Radius.circular(25), // Round bottom right corner
               ),
+          _buildHomeWithSliverAppBar(),
+          SearchTabPage(tabController: _tabController),
+          HelpTabPage(),
+        ],
+      ),
+      bottomNavigationBar: CustomTabBar(tabController: _tabController),
+    );
+  }
+
+  Widget _buildHomeWithSliverAppBar() {
+    return mockData.isEmpty
+        ? const Center(child: CircularProgressIndicator())
+        : CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              floating: true,
+              snap: true,
+              forceMaterialTransparency: true,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.logout),
+                  onPressed: () async {
+                    final shouldLogout = await showDialog<bool>(
+                      context: context,
+                      builder:
+                          (context) => AlertDialog(
+                            backgroundColor: Colors.white,
+                            title: const Text('Confirm Logout'),
+                            content: const Text(
+                              'Are you sure you want to log out?',
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                style: TextButton.styleFrom(foregroundColor: Colors.black87),
+                                child: const Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, true),
+                                style: TextButton.styleFrom(foregroundColor: Colors.white, backgroundColor: const Color(0xFF54AF75)),
+                                child: const Text('Logout'),
+                              ),
+                            ],
+                          ),
+                    );
+                    if (shouldLogout == true) {
+                      await AuthService().signOut();
+                      if (!context.mounted) return;
+                      Navigator.pushReplacementNamed(context, '/login');
+                    }
+                  },
+                ),
+              ],
             ),
             child: Stack(
               children: [
