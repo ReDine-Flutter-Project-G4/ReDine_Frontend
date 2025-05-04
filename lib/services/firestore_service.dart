@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:redine_frontend/services/cache_service.dart';
 
 class FirestoreService {
   static final _firestore = FirebaseFirestore.instance;
@@ -17,9 +18,14 @@ class FirestoreService {
     });
   }
 
-  static Future<Map<String, dynamic>?> getUserData(String uid) async {
+  static Future<Map<String, dynamic>?> getUserPref(String uid) async {
     final doc = await _firestore.collection('users').doc(uid).get();
-    return doc.data();
+    final userPref = doc.data();
+    if (userPref != null) {
+      userPref.remove('createdAt');
+      await CacheService.saveUserPref(userPref); // Cache it
+    }
+    return userPref;
   }
 
   static Future<void> updatePreferences(
