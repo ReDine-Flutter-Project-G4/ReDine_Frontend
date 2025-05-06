@@ -85,7 +85,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
   SliverAppBar _buildAppBar(BuildContext context) {
     return SliverAppBar(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Color(0xFF54AF75),
       automaticallyImplyLeading: false,
       titleSpacing: 0,
       toolbarHeight: 200,
