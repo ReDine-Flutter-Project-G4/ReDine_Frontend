@@ -58,8 +58,16 @@ class _DetailPageState extends State<DetailPage> {
         children: [
           // Background image
           Positioned.fill(
-            child: Image.network(meal['strMealThumb'], fit: BoxFit.cover),
+            child: Transform.translate(
+              offset: const Offset(0, -40), // move up by 30 pixels
+              child: Image.network(
+                meal['strMealThumb'],
+                fit: BoxFit.fitWidth,
+                alignment: Alignment.topCenter,
+              ),
+            ),
           ),
+
           CustomScrollView(
             slivers: [
               SliverAppBar(
