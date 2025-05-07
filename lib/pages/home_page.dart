@@ -40,6 +40,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
   static const String baseUrl = 'http://localhost:3000/api';
   List<dynamic> mealData = [];
   bool _isLoading = true;
+  bool _isMenuLoading = true;
   String _errorMessage = '';
   List<String> _allIngredients = [];
   late final SearchController _searchController;
@@ -103,7 +104,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
   Future<void> fetchMeals({String? category}) async {
     setState(() {
-      _isLoading = true;
+      _isMenuLoading = true;
     });
 
     final categoryQuery = category != null ? '&category=$category' : '';
@@ -119,17 +120,17 @@ class _HomeTabPageState extends State<HomeTabPage> {
         final jsonResponse = json.decode(response.body);
         setState(() {
           mealData = jsonResponse['meals'];
-          _isLoading = false;
+          _isMenuLoading = false;
         });
       } else {
         setState(() {
           mealData = [];
-          _isLoading = false;
+          _isMenuLoading = false;
         });
       }
     } catch (e) {
       print('Error loading mock data: $e');
-      _isLoading = false;
+      _isMenuLoading = false;
     }
   }
 
@@ -152,7 +153,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
           padding: const EdgeInsets.only(
             left: 18,
             right: 18,
-            top: 20,
+            top: 10,
             bottom: 5,
           ),
           sliver: SliverToBoxAdapter(
@@ -171,7 +172,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
             onCategoryTap: onCategorySelected,
           ),
         ),
-        if (_isLoading)
+        if (_isMenuLoading)
           const SliverFillRemaining(
             child: Center(child: CircularProgressIndicator()),
           )
