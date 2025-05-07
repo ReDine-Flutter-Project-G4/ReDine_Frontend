@@ -15,6 +15,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  String? selectedIngredient;
 
   @override
   void initState() {
@@ -50,20 +51,34 @@ class _AppState extends State<App> with SingleTickerProviderStateMixin {
     });
   }
 
+  void updateIngredient(String ingredient) {
+    setState(() {
+      selectedIngredient = ingredient;
+    });
+    _tabController.animateTo(1); // Go to search tab
+  }
+
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
   }
-
-  @override
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true, 
       body: TabBarView(
         controller: _tabController,
         children: [
-          HomeTabPage(),
-          SearchTabPage(tabController: _tabController),
+          HomeTabPage(
+            tabController: _tabController,
+            onIngredientSelected: updateIngredient,
+          ),
+          SearchTabPage(
+            key: ValueKey(selectedIngredient),
+            tabController: _tabController,
+            ingredient: selectedIngredient,
+          ),
           HelpTabPage(),
         ],
       ),
