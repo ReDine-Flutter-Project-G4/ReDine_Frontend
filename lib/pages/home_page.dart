@@ -15,10 +15,6 @@ import 'package:iconify_flutter/icons/fluent_emoji_high_contrast.dart';
 import 'package:iconify_flutter/icons/ion.dart';
 import 'package:iconify_flutter/icons/ep.dart';
 import 'package:iconify_flutter/icons/material_symbols.dart';
-import 'package:iconify_flutter/icons/tabler.dart';
-import 'package:iconify_flutter/icons/game_icons.dart';
-import 'package:iconify_flutter/icons/icon_park_solid.dart';
-import 'package:iconify_flutter/icons/ph.dart';
 
 class HomeTabPage extends StatefulWidget {
   final TabController tabController;
@@ -38,7 +34,6 @@ class _HomeTabPageState extends State<HomeTabPage> {
   List<dynamic> mealData = [];
   bool _isLoading = true;
   bool _isMenuLoading = true;
-  String _errorMessage = '';
   List<String> _allIngredients = [];
   late final SearchController _searchController;
   String selectedCategory = '';
@@ -66,7 +61,6 @@ class _HomeTabPageState extends State<HomeTabPage> {
   Future<void> _fetchIngredients() async {
     setState(() {
       _isLoading = true;
-      _errorMessage = '';
     });
     final url = '$baseUrl/meta/ingredients';
 
@@ -85,7 +79,6 @@ class _HomeTabPageState extends State<HomeTabPage> {
       } else if (response.statusCode == 404) {
         setState(() {
           _allIngredients = [];
-          _errorMessage = 'No data found';
           _isLoading = false;
         });
       } else {
@@ -93,7 +86,6 @@ class _HomeTabPageState extends State<HomeTabPage> {
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'Error fetching data: $e';
         _isLoading = false;
       });
     }
