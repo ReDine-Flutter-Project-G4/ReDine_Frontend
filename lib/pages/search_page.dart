@@ -34,21 +34,22 @@ Future<void> _savePreferences(
 
 class SearchTabPage extends StatefulWidget {
   final TabController tabController;
-  const SearchTabPage({super.key, required this.tabController});
+  final String? ingredient;
+  const SearchTabPage({super.key, required this.tabController, this.ingredient});
 
   @override
   State<SearchTabPage> createState() => _SearchTabPageState();
 }
 
 class _SearchTabPageState extends State<SearchTabPage> {
-  static const String baseUrl = 'http://192.168.1.198:3000/api';
+  static const String baseUrl = 'http://localhost:3000/api';
   late final SearchController _searchController;
 
   final List<String> _selectedAllergens = [];
   final List<String> _selectedAvoids = [];
   final List<String> _selectedCategories = [];
   final List<String> _selectedNationalities = [];
-  final List<String> _selectedChips = [];
+  List<String> _selectedChips = [];
   List<dynamic> _mealData = [];
   bool _isLoading = true;
   String _errorMessage = '';
@@ -64,6 +65,8 @@ class _SearchTabPageState extends State<SearchTabPage> {
   void initState() {
     super.initState();
     _searchController = SearchController();
+    _selectedChips = widget.ingredient != null ? [widget.ingredient!] : [];
+    print(widget.ingredient);
     loadCachedPreferences().then((data) {
       setState(() {
         _selectedAvoids.addAll(data['avoids'] ?? []);

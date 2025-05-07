@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:redine_frontend/components/profile_dropdown.dart';
+import 'package:redine_frontend/components/search_bar.dart';
+import 'package:redine_frontend/pages/search_page.dart';
 import 'package:redine_frontend/services/auth_service.dart';
 import '../widgets/meal_card.dart' as custom_card;
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,20 +12,32 @@ import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:colorful_iconify_flutter/icons/logos.dart';
 
 class HomeTabPage extends StatefulWidget {
-  const HomeTabPage({super.key});
+  final TabController tabController;
+  final void Function(String ingredient) onIngredientSelected;
+  const HomeTabPage({
+    super.key,
+    required this.tabController,
+    required this.onIngredientSelected,
+  });
 
   @override
   State<HomeTabPage> createState() => _HomeTabPageState();
 }
 
 class _HomeTabPageState extends State<HomeTabPage> {
+  static const String baseUrl = 'http://localhost:3000/api';
   List<dynamic> mockData = [];
-  bool isLoading = true;
+  bool _isLoading = true;
+  String _errorMessage = '';
+  List<String> _allIngredients = [];
+  late final SearchController _searchController;
 
   @override
   void initState() {
     super.initState();
+    _searchController = SearchController();
     loadMockData();
+    _fetchIngredients();
   }
 
   List<String> _extractIngredients(Map<String, dynamic> meal) {
@@ -36,6 +51,42 @@ class _HomeTabPageState extends State<HomeTabPage> {
     return ingredients;
   }
 
+  Future<void> _fetchIngredients() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = '';
+    });
+    final url = '$baseUrl/meta/ingredients';
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        setState(() {
+          _allIngredients = List<String>.from(jsonResponse['ingredients']);
+          _isLoading = false;
+        });
+      } else if (response.statusCode == 404) {
+        setState(() {
+          _allIngredients = [];
+          _errorMessage = 'No data found';
+          _isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Error fetching data: $e';
+        _isLoading = false;
+      });
+    }
+  }
+
   Future<void> loadMockData() async {
     try {
       String jsonString = await rootBundle.loadString('assets/mock_data.json');
@@ -43,16 +94,16 @@ class _HomeTabPageState extends State<HomeTabPage> {
       setState(() {
         mockData = jsonResponse['meals'];
       });
-      isLoading = false;
+      _isLoading = false;
     } catch (e) {
       print('Error loading mock data: $e');
-      isLoading = false;
+      _isLoading = false;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
+    if (_isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
     return CustomScrollView(
@@ -85,117 +136,126 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
   SliverAppBar _buildAppBar(BuildContext context) {
     return SliverAppBar(
-      backgroundColor: Color(0xFF54AF75),
+      backgroundColor: Colors.transparent,
       automaticallyImplyLeading: false,
       titleSpacing: 0,
-      toolbarHeight: 200,
-      title: Container(
-        width: double.infinity,
-        height: 200,
-        decoration: const BoxDecoration(
-          color: Color(0xFF54AF75),
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(25),
-            bottomRight: Radius.circular(25),
+      toolbarHeight: 230,
+      title: Transform.translate(
+        offset: const Offset(0, -15),
+        child: Container(
+          width: double.infinity,
+          height: 200,
+          decoration: const BoxDecoration(
+            color: Color(0xFF54AF75),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(25),
+              bottomRight: Radius.circular(25),
+            ),
           ),
-        ),
-        child: Stack(
-          children: [
-            // Vegetable image - behind
-            // Another image below the vegetable image
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 20,
-                ), // Adjust bottom margin as needed
-                child: Image.asset(
-                  'assets/image/Intersect.png', // Replace with your new image path
-                  width: 200, // Adjust size as needed
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Image.asset('assets/image/Intersect.png', width: 200),
                 ),
               ),
-            ),
-            // Big text - in front
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Image.asset(
-                'assets/image/vegetable.png',
-                fit: BoxFit.contain,
-                width: 200,
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Transform.translate(
+                  offset: const Offset(0, 20),
+                  child: Image.asset(
+                    'assets/image/vegetable.png',
+                    fit: BoxFit.contain,
+                    width: 200,
+                  ),
+                ),
               ),
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Column(
-                  mainAxisSize:
-                      MainAxisSize.min, // makes column wrap its content
-                  crossAxisAlignment: CrossAxisAlignment.start, // align left
-                  children: [
-                    Column(
-                      mainAxisSize:
-                          MainAxisSize
-                              .min, // Ensures the column takes up only the space it needs
-                      crossAxisAlignment:
-                          CrossAxisAlignment
-                              .start, // Aligns the content to the left
-                      children: [
-                        SvgPicture.asset(
-                          'assets/redine.svg',
-                          height: 12,
-                          width: 12,
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ), // spacing between image and text
-                        Text(
-                          'Cook from\nyour leftover!',
-                          style: const TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            height: 1,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/redine.svg',
+                            height: 12,
+                            width: 12,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          const SizedBox(height: 8),
+                          Text(
+                            'Cook from\nyour leftover!',
+                            style: const TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              height: 1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10, right: 10),
-                child: Material(
-                  color: Colors.transparent,
-                  shape: const CircleBorder(),
-                  child: InkWell(
-                    onTap: () async {
-                      final RenderBox button =
-                          context.findRenderObject() as RenderBox;
-                      final position = button.localToGlobal(
-                        Offset(button.size.width, 90),
-                      );
-                      ProfileDropdown.show(context, position);
-                    },
-                    borderRadius: BorderRadius.circular(20),
-                    child: Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Colors.black12,
-                        child: ClipOval(
-                          child: AuthService().getProfileImage(size: 60),
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10, right: 10),
+                  child: Material(
+                    color: Colors.transparent,
+                    shape: const CircleBorder(),
+                    child: InkWell(
+                      onTap: () async {
+                        final RenderBox button =
+                            context.findRenderObject() as RenderBox;
+                        final position = button.localToGlobal(
+                          Offset(button.size.width, 90),
+                        );
+                        ProfileDropdown.show(context, position);
+                      },
+                      borderRadius: BorderRadius.circular(20),
+                      child: Padding(
+                        padding: const EdgeInsets.all(3.0),
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.black12,
+                          child: ClipOval(
+                            child: AuthService().getProfileImage(size: 60),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned(
+                    bottom: -20,
+                    left: 16,
+                    right: 16,
+                    child: SearchBarWidget(
+                      barHintText: 'Add your ingredient',
+                      searchController: _searchController,
+                      allSuggestions: _allIngredients,
+                      onItemSelected: (item) async {
+                        widget.onIngredientSelected(item);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
