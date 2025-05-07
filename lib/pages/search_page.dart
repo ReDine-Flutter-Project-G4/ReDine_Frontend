@@ -66,7 +66,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
     super.initState();
     _searchController = SearchController();
     _selectedChips = widget.ingredient != null ? [widget.ingredient!] : [];
-    print(widget.ingredient);
+    _fetchMealIngredients();
     loadCachedPreferences().then((data) {
       setState(() {
         _selectedAvoids.addAll(data['avoids'] ?? []);

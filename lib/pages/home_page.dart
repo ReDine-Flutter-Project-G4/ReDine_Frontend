@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:redine_frontend/components/profile_dropdown.dart';
 import 'package:redine_frontend/components/search_bar.dart';
-import 'package:redine_frontend/pages/search_page.dart';
 import 'package:redine_frontend/services/auth_service.dart';
 import '../widgets/meal_card.dart' as custom_card;
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http/http.dart' as http;
 
 // Iconify
 import 'package:iconify_flutter/iconify_flutter.dart';
