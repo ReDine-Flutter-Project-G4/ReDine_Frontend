@@ -41,7 +41,7 @@ class SearchTabPage extends StatefulWidget {
 }
 
 class _SearchTabPageState extends State<SearchTabPage> {
-  static const String baseUrl = 'http://192.168.1.198:3000/api';
+  static const String baseUrl = 'http://localhost:3000/api';
   late final SearchController _searchController;
 
   final List<String> _selectedAllergens = [];
