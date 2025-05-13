@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:redine_frontend/services/cache_service.dart';
 import 'package:redine_frontend/services/firestore_service.dart';
@@ -11,10 +10,10 @@ class AuthService {
 
 Image getProfileImage({double size = 100}) {
   final photoUrl = FirebaseAuth.instance.currentUser?.photoURL;
+  final proxyUrl = "http://localhost:3000/api/proxy-image?url=${Uri.encodeComponent(photoUrl!)}";
 
   return Image.network(
-    photoUrl ??
-        "https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png",
+    proxyUrl,
     height: size,
     width: size,
     fit: BoxFit.cover,
