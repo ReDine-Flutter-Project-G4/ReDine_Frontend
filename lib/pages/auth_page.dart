@@ -18,6 +18,8 @@ class _AuthPageState extends State<AuthPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   final _authService = AuthService();
   bool _isLoading = false;
@@ -186,15 +188,47 @@ class _AuthPageState extends State<AuthPage> {
                     const SizedBox(height: 10),
                     TextField(
                       controller: _passwordController,
-                      obscureText: true,
-                      decoration: _inputDecoration('Password'),
+                      obscureText: _obscurePassword,
+                      decoration: _inputDecoration('Password').copyWith(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            setState(
+                              () => _obscurePassword = !_obscurePassword,
+                            );
+                          },
+                        ),
+                      ),
                     ),
                     if (!_isLogin) ...[
                       const SizedBox(height: 10),
                       TextField(
                         controller: _confirmPasswordController,
-                        obscureText: true,
-                        decoration: _inputDecoration('Confirm Password'),
+                        obscureText: _obscureConfirmPassword,
+                        decoration: _inputDecoration(
+                          'Confirm Password',
+                        ).copyWith(
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscureConfirmPassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(
+                                () =>
+                                    _obscureConfirmPassword =
+                                        !_obscureConfirmPassword,
+                              );
+                            },
+                          ),
+                        ),
                       ),
                     ],
                     const SizedBox(height: 20),
