@@ -7,6 +7,7 @@ import 'package:redine_frontend/state/global_flags.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
 Image getProfileImage({double size = 100}) {
   final photoUrl = FirebaseAuth.instance.currentUser?.photoURL;
@@ -48,7 +49,8 @@ Image getProfileImage({double size = 100}) {
   }
 
   Future<void> signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    await _googleSignIn.signOut();
+    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
     if (googleUser == null) return; // User cancelled
 
     final GoogleSignInAuthentication googleAuth =
@@ -122,6 +124,7 @@ Image getProfileImage({double size = 100}) {
   }
 
   Future<void> signOut() async {
+    await _googleSignIn.signOut();
     await _auth.signOut();
     await CacheService.clearUserPref();
   }
