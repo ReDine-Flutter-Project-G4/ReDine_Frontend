@@ -11,7 +11,7 @@ class AuthService {
 
 Image getProfileImage({double size = 100}) {
   final photoUrl = FirebaseAuth.instance.currentUser?.photoURL;
-  final proxyUrl = "http://localhost:3000/api/proxy-image?url=${Uri.encodeComponent(photoUrl!)}";
+  final proxyUrl = "http://localhost:3001/api/proxy-image?url=${Uri.encodeComponent(photoUrl!)}";
 
   return Image.network(
     proxyUrl,

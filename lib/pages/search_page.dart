@@ -9,6 +9,7 @@ import '../pages/detail_page.dart';
 import '../components/search_bar.dart';
 import '../components/chip_list.dart';
 import '../components/filter_bottom_sheet.dart';
+import '../pages/camera_page.dart';
 import '../widgets/meal_card.dart' as custom_card;
 
 Future<Map<String, List<String>>> loadCachedPreferences() async {
@@ -42,7 +43,7 @@ class SearchTabPage extends StatefulWidget {
 }
 
 class _SearchTabPageState extends State<SearchTabPage> {
-  static const String baseUrl = 'http://localhost:3000/api';
+  static const String baseUrl = 'http://localhost:3001/api';
   late final SearchController _searchController;
 
   final List<String> _selectedAllergens = [];
@@ -349,6 +350,33 @@ class _SearchTabPageState extends State<SearchTabPage> {
               ),
             ),
             const SizedBox(width: 8),
+
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: isFilterOpen ? Color(0xFF54AF75) : Color(0xFFB6B6B6),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.photo_camera, color: Colors.white, size: 28),
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CameraPage(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(width: 8),
+
             Stack(
               clipBehavior: Clip.none,
               children: [

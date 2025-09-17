@@ -30,7 +30,7 @@ class HomeTabPage extends StatefulWidget {
 }
 
 class _HomeTabPageState extends State<HomeTabPage> {
-  static const String baseUrl = 'http://localhost:3000/api';
+  static const String baseUrl = 'http://localhost:3001/api';
   List<dynamic> mealData = [];
   bool _isLoading = true;
   bool _isMenuLoading = true;
