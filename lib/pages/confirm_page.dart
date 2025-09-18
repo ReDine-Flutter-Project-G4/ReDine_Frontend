@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import '../components/search_bar.dart';
+import '../components/chip_list.dart';
 
 class ConfirmPage extends StatefulWidget {
   const ConfirmPage({super.key, required this.imageFile});
@@ -42,9 +43,9 @@ class _ConfirmPageState extends State<ConfirmPage> {
     }
   }
 
-  void _removeIngredient(int index) {
+  void _removeIngredient(String ingredient) {
     setState(() {
-      _detectedIngredients.removeAt(index);
+      _detectedIngredients.remove(ingredient);
     });
   }
 
@@ -223,7 +224,7 @@ class _ConfirmPageState extends State<ConfirmPage> {
                                     : Icons.psychology,
                                 color:
                                     _isAnalyzing
-                                        ? Colors.orange
+                                        ? Colors.grey
                                         : _hasAnalyzed
                                         ? const Color(0xFF54AF75)
                                         : Colors.grey,
@@ -241,7 +242,7 @@ class _ConfirmPageState extends State<ConfirmPage> {
                                   fontWeight: FontWeight.w600,
                                   color:
                                       _isAnalyzing
-                                          ? Colors.orange
+                                          ? Colors.grey
                                           : _hasAnalyzed
                                           ? const Color(0xFF54AF75)
                                           : Colors.grey,
@@ -257,9 +258,9 @@ class _ConfirmPageState extends State<ConfirmPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const Text(
-                                'Detected Ingredients:',
+                                'Detected Ingredients',
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
@@ -438,46 +439,16 @@ class _ConfirmPageState extends State<ConfirmPage> {
     }
 
     if (_detectedIngredients.isNotEmpty) {
-      return ListView.builder(
-        itemCount: _detectedIngredients.length,
-        itemBuilder: (context, index) {
-          return Container(
-            margin: const EdgeInsets.only(bottom: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: const Color(0xFF54AF75),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: const Color(0xFF54AF75),
-                width: 1,
-              ),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    _detectedIngredients[index],
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                // Delete button
-                IconButton(
-                  onPressed: () => _removeIngredient(index),
-                  icon: const Icon(Icons.close, size: 18, color: Colors.white),
-                  padding: const EdgeInsets.all(4),
-                  constraints: const BoxConstraints(
-                    minWidth: 32,
-                    minHeight: 32,
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+      return SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: ChipListWidget(
+            chips: _detectedIngredients,
+            onChipDeleted: (chip) {
+              _removeIngredient(chip);
+            },
+          ),
+        ),
       );
     }
 
