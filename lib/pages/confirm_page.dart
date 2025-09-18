@@ -150,7 +150,6 @@ class _ConfirmPageState extends State<ConfirmPage> {
         });
       }
     } catch (e) {
-      // Handle error silently for ingredient fetching
       debugPrint('Error fetching ingredients: $e');
     }
   }
