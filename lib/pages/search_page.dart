@@ -358,18 +358,30 @@ class _SearchTabPageState extends State<SearchTabPage> {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: isFilterOpen ? Color(0xFF54AF75) : Color(0xFFB6B6B6),
+                    color: Color(0xFFB6B6B6),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: IconButton(
                     icon: const Icon(Icons.photo_camera, color: Colors.white, size: 28),
                     onPressed: () async {
-                      Navigator.push(
+                      final result = await Navigator.push<List<String>>(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const CameraPage(),
                         ),
                       );
+                      
+                      // If we got ingredients from the camera flow, add them to selected chips
+                      if (result != null && result.isNotEmpty) {
+                        setState(() {
+                          for (String ingredient in result) {
+                            if (!_selectedChips.contains(ingredient)) {
+                              _selectedChips.add(ingredient);
+                            }
+                          }
+                        });
+                        await _fetchMealIngredients();
+                      }
                     },
                   ),
                 ),

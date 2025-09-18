@@ -18,7 +18,7 @@ class SearchBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 40,
-      width: 300,
+      width: double.infinity,
       child: SearchAnchor.bar(
         viewBackgroundColor: Colors.white,
         searchController: searchController,

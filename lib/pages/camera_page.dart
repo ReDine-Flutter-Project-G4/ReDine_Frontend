@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+
+import 'package:redine_frontend/pages/confirm_page.dart';
 
 class CameraPage extends StatefulWidget {
-  const CameraPage({Key? key}) : super(key: key);
+  const CameraPage({super.key});
 
   @override
   State<CameraPage> createState() => _CameraPageState();
 }
 
 class _CameraPageState extends State<CameraPage> {
-  XFile? _imageFile;
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _openCamera() async {
@@ -21,15 +21,26 @@ class _CameraPageState extends State<CameraPage> {
         maxHeight: 1080,
         imageQuality: 85,
       );
-      if (pickedFile != null) {
-        setState(() {
-          _imageFile = pickedFile;
-        });
+      if (pickedFile != null && mounted) {
+        // Navigate to confirm page and wait for result
+        final result = await Navigator.push<List<String>>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ConfirmPage(imageFile: pickedFile),
+          ),
+        );
+        
+        // If we got ingredients back, return them to the search page
+        if (result != null && result.isNotEmpty && mounted) {
+          Navigator.pop(context, result);
+        }
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error opening camera: $e')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error opening camera: $e')));
+      }
     }
   }
 
@@ -41,15 +52,26 @@ class _CameraPageState extends State<CameraPage> {
         maxHeight: 1080,
         imageQuality: 85,
       );
-      if (pickedFile != null) {
-        setState(() {
-          _imageFile = pickedFile;
-        });
+      if (pickedFile != null && mounted) {
+        // Navigate to confirm page and wait for result
+        final result = await Navigator.push<List<String>>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ConfirmPage(imageFile: pickedFile),
+          ),
+        );
+        
+        // If we got ingredients back, return them to the search page
+        if (result != null && result.isNotEmpty && mounted) {
+          Navigator.pop(context, result);
+        }
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error opening gallery: $e')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error opening gallery: $e')));
+      }
     }
   }
 
@@ -65,105 +87,59 @@ class _CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-        title: const Text('Camera'),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        title: const Text(
+          'Camera',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            size: 24,
+            color: Colors.black,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.photo_library),
-            onPressed: _openGallery,
-            tooltip: 'Select from Gallery',
-          ),
-        ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Center(
-              child: _imageFile == null
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.camera_alt,
-                          size: 80,
-                          color: Colors.white54,
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'No image captured',
-                          style: TextStyle(
-                            color: Colors.white54,
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        ElevatedButton.icon(
-                          onPressed: _openCamera,
-                          icon: const Icon(Icons.camera_alt),
-                          label: const Text('Take Photo'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF54AF75),
-                            foregroundColor: Colors.white,
-                          ),
-                        ),
-                      ],
-                    )
-                  : ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.file(
-                        File(_imageFile!.path),
-                        fit: BoxFit.contain,
-                      ),
-                    ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.camera_alt, size: 80, color: Colors.grey),
+            const SizedBox(height: 16),
+            const Text(
+              'Take a photo of your ingredients',
+              style: TextStyle(color: Colors.grey, fontSize: 16),
             ),
-          ),
-          if (_imageFile != null)
-            Container(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: _openGallery,
-                    icon: const Icon(Icons.photo_library),
-                    label: const Text('Gallery'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey[800],
-                      foregroundColor: Colors.white,
-                    ),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: _openCamera,
-                    icon: const Icon(Icons.camera_alt),
-                    label: const Text('Retake'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF54AF75),
-                      foregroundColor: Colors.white,
-                    ),
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      // TODO: Implement use photo functionality
-                      Navigator.pop(context, _imageFile);
-                    },
-                    icon: const Icon(Icons.check),
-                    label: const Text('Use Photo'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF54AF75),
-                      foregroundColor: Colors.white,
-                    ),
-                  ),
-                ],
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: _openCamera,
+              icon: const Icon(Icons.camera_alt),
+              label: const Text('Take Photo'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF54AF75),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
               ),
             ),
-        ],
+            const SizedBox(height: 16),
+            TextButton.icon(
+              onPressed: _openGallery,
+              icon: const Icon(Icons.photo_library, color: Colors.grey),
+              label: const Text(
+                'Choose from Gallery',
+                style: TextStyle(color: Colors.grey),
+              ),
+              style: TextButton.styleFrom(foregroundColor: Colors.grey),
+            ),
+          ],
+        ),
       ),
     );
   }
