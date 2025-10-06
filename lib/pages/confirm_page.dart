@@ -8,6 +8,7 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import '../components/search_bar.dart';
 import '../components/chip_list.dart';
+import '../config/api_config.dart';
 
 class ConfirmPage extends StatefulWidget {
   const ConfirmPage({super.key, required this.imageFile});
@@ -19,7 +20,6 @@ class ConfirmPage extends StatefulWidget {
 }
 
 class _ConfirmPageState extends State<ConfirmPage> {
-  static const String baseUrl = 'http://localhost:3001/api';
   List<String> _detectedIngredients = [];
   List<String> _allIngredients = [];
   bool _isAnalyzing = false;
@@ -90,7 +90,7 @@ class _ConfirmPageState extends State<ConfirmPage> {
       // Create multipart request
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('$baseUrl/ai/classify'),
+        Uri.parse(ApiConfig.aiClassifyUrl),
       );
 
       // Add image file
@@ -139,7 +139,7 @@ class _ConfirmPageState extends State<ConfirmPage> {
   Future<void> _fetchIngredients() async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/meta/ingredients'),
+        Uri.parse(ApiConfig.metaIngredientsUrl),
         headers: {'Content-Type': 'application/json'},
       );
 
@@ -212,46 +212,6 @@ class _ConfirmPageState extends State<ConfirmPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Status section
-                          Row(
-                            children: [
-                              Icon(
-                                _isAnalyzing
-                                    ? Icons.hourglass_empty
-                                    : _hasAnalyzed
-                                    ? Icons.check_circle
-                                    : Icons.psychology,
-                                color:
-                                    _isAnalyzing
-                                        ? Colors.grey
-                                        : _hasAnalyzed
-                                        ? const Color(0xFF54AF75)
-                                        : Colors.grey,
-                                size: 24,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                _isAnalyzing
-                                    ? 'Analyzing ingredients...'
-                                    : _hasAnalyzed
-                                    ? 'Analysis Complete'
-                                    : 'Ready to analyze',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color:
-                                      _isAnalyzing
-                                          ? Colors.grey
-                                          : _hasAnalyzed
-                                          ? const Color(0xFF54AF75)
-                                          : Colors.grey,
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          const SizedBox(height: 16),
-
                           // Ingredients section
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -261,7 +221,7 @@ class _ConfirmPageState extends State<ConfirmPage> {
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                                  color: Color(0xFF54AF75),
                                 ),
                               ),
                             ],

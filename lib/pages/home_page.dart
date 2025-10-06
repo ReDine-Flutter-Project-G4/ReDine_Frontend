@@ -7,6 +7,7 @@ import 'package:redine_frontend/components/search_bar.dart';
 import 'package:redine_frontend/services/auth_service.dart';
 import '../widgets/meal_card.dart' as custom_card;
 import 'package:flutter_svg/flutter_svg.dart';
+import '../config/api_config.dart';
 
 // Iconify
 import 'package:iconify_flutter/iconify_flutter.dart';
@@ -30,7 +31,6 @@ class HomeTabPage extends StatefulWidget {
 }
 
 class _HomeTabPageState extends State<HomeTabPage> {
-  static const String baseUrl = 'http://localhost:3001/api';
   List<dynamic> mealData = [];
   bool _isLoading = true;
   bool _isMenuLoading = true;
@@ -62,7 +62,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
     setState(() {
       _isLoading = true;
     });
-    final url = '$baseUrl/meta/ingredients';
+    final url = ApiConfig.metaIngredientsUrl;
 
     try {
       final response = await http.get(
@@ -97,7 +97,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
     });
 
     final categoryQuery = category != null ? '&category=$category' : '';
-    final url = '$baseUrl/menu/ingredients?$categoryQuery';
+    final url = '${ApiConfig.menuIngredientsUrl}?$categoryQuery';
 
     try {
       final response = await http.get(

@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:redine_frontend/services/cache_service.dart';
 import 'package:redine_frontend/services/firestore_service.dart';
 import 'package:redine_frontend/state/global_flags.dart';
+import '../config/api_config.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -11,7 +12,7 @@ class AuthService {
 
 Image getProfileImage({double size = 100}) {
   final photoUrl = FirebaseAuth.instance.currentUser?.photoURL;
-  final proxyUrl = "http://localhost:3001/api/proxy-image?url=${Uri.encodeComponent(photoUrl!)}";
+  final proxyUrl = ApiConfig.proxyImageUrl(photoUrl!);
 
   return Image.network(
     proxyUrl,

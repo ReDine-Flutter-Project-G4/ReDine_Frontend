@@ -11,6 +11,7 @@ import '../components/chip_list.dart';
 import '../components/filter_bottom_sheet.dart';
 import '../pages/camera_page.dart';
 import '../widgets/meal_card.dart' as custom_card;
+import '../config/api_config.dart';
 
 Future<Map<String, List<String>>> loadCachedPreferences() async {
   final userData = await CacheService.loadUserPref();
@@ -43,7 +44,6 @@ class SearchTabPage extends StatefulWidget {
 }
 
 class _SearchTabPageState extends State<SearchTabPage> {
-  static const String baseUrl = 'http://localhost:3001/api';
   late final SearchController _searchController;
 
   final List<String> _selectedAllergens = [];
@@ -91,7 +91,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = '$baseUrl/meta/categories';
+    final url = ApiConfig.metaCategoriesUrl;
     try {
       final response = await http.get(
         Uri.parse(url),
@@ -122,7 +122,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = '$baseUrl/meta/allergens';
+    final url = ApiConfig.metaAllergensUrl;
 
     try {
       final response = await http.get(
@@ -155,7 +155,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = '$baseUrl/meta/areas';
+    final url = ApiConfig.metaAreasUrl;
 
     try {
       final response = await http.get(
@@ -188,7 +188,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = '$baseUrl/meta/ingredients';
+    final url = ApiConfig.metaIngredientsUrl;
 
     try {
       final response = await http.get(
@@ -232,7 +232,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _errorMessage = '';
     });
     final url =
-        '$baseUrl/menu/ingredients?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&avoids=$avoidsQuery&allergens=$allergensQuery';
+        '${ApiConfig.menuIngredientsUrl}?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&avoids=$avoidsQuery&allergens=$allergensQuery';
     try {
       final response = await http.get(
         Uri.parse(url),
