@@ -1,7 +1,7 @@
 /// API configuration constants for the ReDine app
 class ApiConfig {
   /// Base URL for the ReDine API server
-  static const String baseUrl = 'http://127.0.0.1:3001/api';
+  static const String baseUrl = 'http://redineai.sit.kmutt.ac.th:5000/api';
   
   /// Alternative method to get base URL (for future flexibility)
   static String getBaseUrl() => baseUrl;
