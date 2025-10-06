@@ -3,13 +3,16 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:redine_frontend/services/cache_service.dart';
 import 'package:redine_frontend/services/firestore_service.dart';
 import '../pages/detail_page.dart';
 import '../components/search_bar.dart';
 import '../components/chip_list.dart';
 import '../components/filter_bottom_sheet.dart';
+import '../pages/confirm_page.dart';
 import '../widgets/meal_card.dart' as custom_card;
+import '../config/api_config.dart';
 
 Future<Map<String, List<String>>> loadCachedPreferences() async {
   final userData = await CacheService.loadUserPref();
@@ -42,8 +45,8 @@ class SearchTabPage extends StatefulWidget {
 }
 
 class _SearchTabPageState extends State<SearchTabPage> {
-  static const String baseUrl = 'http://localhost:3000/api';
   late final SearchController _searchController;
+  final ImagePicker _picker = ImagePicker();
 
   final List<String> _selectedAllergens = [];
   final List<String> _selectedAvoids = [];
@@ -90,7 +93,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = '$baseUrl/meta/categories';
+    final url = ApiConfig.metaCategoriesUrl;
     try {
       final response = await http.get(
         Uri.parse(url),
@@ -121,7 +124,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = '$baseUrl/meta/allergens';
+    final url = ApiConfig.metaAllergensUrl;
 
     try {
       final response = await http.get(
@@ -154,7 +157,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = '$baseUrl/meta/areas';
+    final url = ApiConfig.metaAreasUrl;
 
     try {
       final response = await http.get(
@@ -187,7 +190,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _isLoading = true;
       _errorMessage = '';
     });
-    final url = '$baseUrl/meta/ingredients';
+    final url = ApiConfig.metaIngredientsUrl;
 
     try {
       final response = await http.get(
@@ -231,7 +234,7 @@ class _SearchTabPageState extends State<SearchTabPage> {
       _errorMessage = '';
     });
     final url =
-        '$baseUrl/menu/ingredients?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&avoids=$avoidsQuery&allergens=$allergensQuery';
+        '${ApiConfig.menuIngredientsUrl}?ingredients=$ingredientsQuery&nationality=$nationalityQuery&category=$cateforyyQuery&avoids=$avoidsQuery&allergens=$allergensQuery';
     try {
       final response = await http.get(
         Uri.parse(url),
@@ -275,6 +278,136 @@ class _SearchTabPageState extends State<SearchTabPage> {
       }
     }
     return ingredients;
+  }
+
+  Future<void> _openImageSource() async {
+    // Show bottom sheet with camera and gallery options
+    final ImageSource? source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      backgroundColor: Colors.grey[900],
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey[600],
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Select Photo Source',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  onTap: () => Navigator.pop(context, ImageSource.camera),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF54AF75).withOpacity(0.2),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.camera_alt,
+                          color: Color(0xFF54AF75),
+                          size: 30,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Camera',
+                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                    ],
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.pop(context, ImageSource.gallery),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.photo_library,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Gallery',
+                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+
+    if (source == null) return;
+
+    try {
+      final XFile? file = await _picker.pickImage(
+        source: source,
+        preferredCameraDevice: CameraDevice.rear,
+        maxWidth: 1920,
+        maxHeight: 1080,
+        imageQuality: 85,
+      );
+
+      if (file == null || !mounted) return;
+
+      final result = await Navigator.push<List<String>>(
+        context,
+        MaterialPageRoute(builder: (_) => ConfirmPage(imageFile: file)),
+      );
+
+      // If we got ingredients from the camera/gallery flow, add them to selected chips
+      if (result != null && result.isNotEmpty) {
+        setState(() {
+          for (String ingredient in result) {
+            if (!_selectedChips.contains(ingredient)) {
+              _selectedChips.add(ingredient);
+            }
+          }
+        });
+        await _fetchMealIngredients();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to ${source == ImageSource.camera ? 'take picture' : 'pick image'}: $e')),
+        );
+      }
+    }
   }
 
   @override
@@ -349,6 +482,26 @@ class _SearchTabPageState extends State<SearchTabPage> {
               ),
             ),
             const SizedBox(width: 8),
+
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFB6B6B6),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.photo_camera, color: Colors.white, size: 28),
+                    onPressed: _openImageSource,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(width: 8),
+
             Stack(
               clipBehavior: Clip.none,
               children: [
