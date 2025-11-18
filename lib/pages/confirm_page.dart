@@ -154,6 +154,51 @@ class _ConfirmPageState extends State<ConfirmPage> {
     }
   }
 
+  void _showFullScreenImage() {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog.fullscreen(
+          child: Stack(
+            children: [
+              // Background
+              Container(
+                color: Colors.black,
+                child: Center(
+                  child: kIsWeb
+                      ? _cachedImageBytes != null
+                          ? Image.memory(
+                              _cachedImageBytes!,
+                              fit: BoxFit.contain,
+                            )
+                          : const CircularProgressIndicator()
+                      : Image.file(
+                          File(widget.imageFile!.path),
+                          fit: BoxFit.contain,
+                        ),
+                ),
+              ),
+              // Close button
+              Positioned(
+                top: 50,
+                right: 20,
+                child: IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,29 +224,32 @@ class _ConfirmPageState extends State<ConfirmPage> {
               ? Column(
                 children: [
                   // Small image preview
-                  Container(
-                    height: 120,
-                    width: double.infinity,
-                    margin: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.grey.shade300, width: 1),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(11),
-                      child: kIsWeb
-                          ? _cachedImageBytes != null
-                              ? Image.memory(
-                                  _cachedImageBytes!,
-                                  fit: BoxFit.cover,
-                                )
-                              : const Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                          : Image.file(
-                              File(widget.imageFile!.path),
-                              fit: BoxFit.cover,
-                            ),
+                  GestureDetector(
+                    onTap: _showFullScreenImage,
+                    child: Container(
+                      height: 120,
+                      width: double.infinity,
+                      margin: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey.shade300, width: 1),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(11),
+                        child: kIsWeb
+                            ? _cachedImageBytes != null
+                                ? Image.memory(
+                                    _cachedImageBytes!,
+                                    fit: BoxFit.cover,
+                                  )
+                                : const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                            : Image.file(
+                                File(widget.imageFile!.path),
+                                fit: BoxFit.cover,
+                              ),
+                      ),
                     ),
                   ),
 
